@@ -7,10 +7,10 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | Day milestone | Phase | Work | Evidence required | Status |
 |---|---|---|---|---|
 | 1 | Plan | Define the problem, contractor and worker roles, ten MVP features, later features, and acceptance rules. | FEATURES.md and new GitHub repository | Done |
-| 2 | Design | Design PostgreSQL tables, relationships, constraints, and login, list, detail, dashboard wireframes. | Schema diagram and four wireframes in docs/ | Not started |
-| 3 | Setup | Initialise backend, connect PostgreSQL, configure environment variables, and add health endpoint. | Running backend and database-connected /health | Not started |
-| 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | Not started |
-| 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | Not started |
+| 2 | Design | Design PostgreSQL tables, relationships, constraints, and login, list, detail, dashboard wireframes. | Schema diagram and four wireframes in docs/ | In progress |
+| 3 | Setup | Initialise backend, connect PostgreSQL, configure environment variables, and add health endpoint. | Running backend and database-connected /health | In progress |
+| 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | In progress |
+| 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | In progress |
 | 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | Not started |
 | 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | Not started |
 | 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | Not started |
@@ -41,3 +41,6 @@ Update each milestone only after checking its deliverables. Record its actual co
 ## Milestone adaptations
 
 This original project follows the sheet's full-stack milestones. Its main CRUD entity is the worksite. Its heavy feature is worker acknowledgement and dispute resolution. Financial records retain corrections through reversals; delete demonstrations use eligible editable records. Posted attendance or ledger history must never be silently deleted.
+
+## 19 November 2026
+Authentication implemented with Argon2 hashes, JWT expiry/issuer/audience verification, and database-backed identity lookup. Five auth checks passed. Successful database signup/login, role-specific route tests, full migrations and visual wireframes remain pending; milestones 2–5 remain in progress.

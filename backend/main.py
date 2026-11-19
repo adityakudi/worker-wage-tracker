@@ -18,3 +18,6 @@ def health():
         return {"status": "ok", "database": "connected"}
     except psycopg.Error:
         return JSONResponse(status_code=503, content={"status": "unavailable", "database": "unreachable"})
+
+from backend.auth import router
+app.include_router(router)
