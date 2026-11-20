@@ -11,7 +11,7 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | 3 | Setup | Initialise backend, connect PostgreSQL, configure environment variables, and add health endpoint. | Running backend and database-connected /health | In progress |
 | 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | In progress |
 | 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | In progress |
-| 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | Not started |
+| 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | In progress |
 | 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | Not started |
 | 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | Not started |
 | 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | Not started |
@@ -44,3 +44,6 @@ This original project follows the sheet's full-stack milestones. Its main CRUD e
 
 ## 19 November 2026
 Authentication implemented with Argon2 hashes, JWT expiry/issuer/audience verification, and database-backed identity lookup. Five auth checks passed. Successful database signup/login, role-specific route tests, full migrations and visual wireframes remain pending; milestones 2–5 remain in progress.
+
+## 20 November 2026
+Added contractor-owned worksite CRUD, bounded pagination, search and active filtering, migration 002 and access/validation tests. PostgreSQL success-path integration remains pending. Milestone 6 is in progress; milestone 7 relationships remain pending.

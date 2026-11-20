@@ -4,7 +4,7 @@ A mobile-friendly platform for daily-wage workers and contractors to maintain sh
 
 ## Status
 
-Day 1 planning is complete. Application implementation, pilot validation, tests, and deployment are pending. This repository starts from scratch.
+Planning, authentication and initial worksite APIs are implemented. Database-backed integration, related entity APIs, frontend, pilot validation and deployment remain pending. This repository starts from scratch.
 
 ## Problem and users
 
@@ -36,7 +36,7 @@ Application setup is planned for milestone 3. Runnable commands will be document
 
 ## Tests
 
-No application tests exist yet. Milestone 13 requires at least five API tests, including meaningful money and access-control coverage.
+Auth and worksite access/validation tests are in backend/tests. Milestone 13 requires at least five API tests, including meaningful money and access-control coverage.
 
 ## Screenshots, deployment, and demo
 
