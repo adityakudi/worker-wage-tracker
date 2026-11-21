@@ -4,7 +4,7 @@ A mobile-friendly platform for daily-wage workers and contractors to maintain sh
 
 ## Status
 
-Planning, authentication and initial worksite APIs are implemented. Database-backed integration, related entity APIs, frontend, pilot validation and deployment remain pending. This repository starts from scratch.
+Planning, authentication and initial worksite APIs are implemented. Database-backed integration, related entity APIs, frontend end-to-end checks, pilot validation and deployment remain pending. This repository starts from scratch.
 
 ## Problem and users
 
@@ -45,3 +45,7 @@ Pending working software. Real screenshots, the verified public URL, and a two-m
 ## What I built and what I understood
 
 Day 1: defined the problem hypothesis, contractor and worker roles, MVP boundaries, and acceptance checks. The design separates review acknowledgement from payment receipt, snapshots historical wage rates, and uses reversals so corrections preserve an audit trail. Implementation and first-hand learning will be recorded as milestones are completed.
+
+## Frontend development
+
+Run `npm ci --prefix frontend` then `npm run dev --prefix frontend`. Start backend from repository root with `uvicorn backend.main:app`. Vite proxies auth and worksite requests to port 8000. `npm run build --prefix frontend` builds static assets. Production hosting must proxy these API paths; no production routing has been configured yet.
