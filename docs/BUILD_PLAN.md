@@ -15,7 +15,7 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | Not started |
 | 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | In progress |
 | 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | In progress |
-| 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | Not started |
+| 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | In progress |
 | 11 | Heavy feature backend | Implement acknowledgement, disputes, responses, correction proposals, and immutable audit records. | Heavy feature backend verified | Not started |
 | 12 | Heavy feature UI | Connect worker dispute and contractor response screens; worker confirms resolution. | Complete end-to-end dispute demonstration | Not started |
 | 13 | Testing | Test main flows and bad input; cover wage maths, access isolation, duplicate attendance, reversals, and disputes. | At least five passing API tests and resolved main-flow bugs | Not started |
@@ -50,3 +50,6 @@ Added contractor-owned worksite CRUD, bounded pagination, search and active filt
 
 ## 21 November 2026
 Added React/Vite authentication forms, role-aware layout, API-backed contractor worksite search/pagination and detail view. Tokens stay in memory and clear on sign out/401. Worker financial screens, dedicated routing, browser end-to-end checks and database integration remain pending. Milestones 8–9 remain in progress.
+
+## 22 November 2026
+Added API-backed worksite create/edit/delete forms with confirmation, loading/error states and list refresh. Fixed 204 response handling so successful deletion does not attempt JSON parsing. Attendance/payments and their membership/wage prerequisites remain unimplemented; milestone 10 remains in progress. Database success-path and browser end-to-end verification remain pending.
