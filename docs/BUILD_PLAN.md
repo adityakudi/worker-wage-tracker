@@ -12,7 +12,7 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | In progress |
 | 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | In progress |
 | 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | In progress |
-| 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | Not started |
+| 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | In progress |
 | 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | In progress |
 | 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | In progress |
 | 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | In progress |
@@ -53,3 +53,6 @@ Added React/Vite authentication forms, role-aware layout, API-backed contractor 
 
 ## 22 November 2026
 Added API-backed worksite create/edit/delete forms with confirmation, loading/error states and list refresh. Fixed 204 response handling so successful deletion does not attempt JSON parsing. Attendance/payments and their membership/wage prerequisites remain unimplemented; milestone 10 remains in progress. Database success-path and browser end-to-end verification remain pending.
+
+## 23 November 2026
+Implemented authenticated worker invitation/list/accept APIs and membership migration with unique contractor/worker pairs. Acceptance requires the invited worker, and list queries restrict rows to participants. Added three access checks. Membership success paths still require PostgreSQL integration. Assignments, wage agreements, attendance, ledger and dispute workflow remain pending; milestones 11–12 were not completed.

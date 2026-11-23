@@ -23,3 +23,5 @@ from backend.auth import router
 app.include_router(router)
 from backend.worksites import router as worksites_router
 app.include_router(worksites_router)
+from backend.memberships import router as memberships_router
+app.include_router(memberships_router)
