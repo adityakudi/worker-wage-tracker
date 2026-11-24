@@ -56,3 +56,8 @@ Added API-backed worksite create/edit/delete forms with confirmation, loading/er
 
 ## 23 November 2026
 Implemented authenticated worker invitation/list/accept APIs and membership migration with unique contractor/worker pairs. Acceptance requires the invited worker, and list queries restrict rows to participants. Added three access checks. Membership success paths still require PostgreSQL integration. Assignments, wage agreements, attendance, ledger and dispute workflow remain pending; milestones 11–12 were not completed.
+
+## 24 November 2026 — showcase request
+Redesigned the frontend and added an interactive sample-data showcase, preserving API-connected screens. Production build and browser interaction checks passed. Created a motion showcase from actual frontend captures. This does not mark backend financial workflows or milestone 13 complete. See SHOWCASE.md for verification and limitations.
+
+Published LinkedIn progress post: https://www.linkedin.com/feed/update/urn:li:activity:7530932552811925504/ (ALTA tagged). This single post is evidence of a progress update, not three separate milestone publications.

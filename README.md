@@ -49,3 +49,7 @@ Day 1: defined the problem hypothesis, contractor and worker roles, MVP boundari
 ## Frontend development
 
 Run `npm ci --prefix frontend` then `npm run dev --prefix frontend`. Start backend from repository root with `uvicorn backend.main:app`. Vite proxies auth and worksite requests to port 8000. `npm run build --prefix frontend` builds static assets. Production hosting must proxy these API paths; no production routing has been configured yet.
+
+## Redesigned frontend and showcase
+
+The frontend now opens with a cinematic landing page. Choose **Explore the demo** to try a sample-data workspace, or **Open workspace** to use the existing backend-connected forms. Sample attendance and payment screens are prototypes; no real financial data is recorded. See [showcase details](docs/SHOWCASE.md).
