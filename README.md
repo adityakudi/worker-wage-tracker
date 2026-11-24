@@ -32,11 +32,15 @@ The [detailed milestone plan](docs/BUILD_PLAN.md) maps each of the fifteen Track
 
 ## Run locally
 
-Application setup is planned for milestone 3. Runnable commands will be documented after the backend and frontend exist and have been verified.
+From repository root, create a Python virtual environment and install `backend/requirements-dev.txt`. Set `DATABASE_URL` to a PostgreSQL database and `JWT_SECRET` to a long random secret. Run `python -m backend.migrate`, then `uvicorn backend.main:app`. Use a fresh empty database for the migration runner; databases previously created manually need an explicit reviewed baseline before adopting tracked migrations.
+
+Check `/health` for `status: ok` and `database: connected`. Database outages return 503 without exposing connection details.
 
 ## Tests
 
-Auth and worksite access/validation tests are in backend/tests. Milestone 13 requires at least five API tests, including meaningful money and access-control coverage.
+Run `python -m unittest discover -s backend/tests -v`. Set `TEST_DATABASE_URL` to enable the real PostgreSQL suite; it creates and removes a uniquely named test schema and does not modify other schemas. Without that variable, integration checks are explicitly skipped. The GitHub Actions workflow provisions PostgreSQL 16, runs the full suite, then builds the frontend.
+
+Auth, worksite, membership and database error checks are in backend/tests. Milestone 13 requires at least five API tests, including meaningful money and access-control coverage.
 
 ## Screenshots, deployment, and demo
 

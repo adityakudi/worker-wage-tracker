@@ -61,3 +61,6 @@ Implemented authenticated worker invitation/list/accept APIs and membership migr
 Redesigned the frontend and added an interactive sample-data showcase, preserving API-connected screens. Production build and browser interaction checks passed. Created a motion showcase from actual frontend captures. This does not mark backend financial workflows or milestone 13 complete. See SHOWCASE.md for verification and limitations.
 
 Published LinkedIn progress post: https://www.linkedin.com/feed/update/urn:li:activity:7530932552811925504/ (ALTA tagged). This single post is evidence of a progress update, not three separate milestone publications.
+
+## 24 November 2026 — verification
+Added an atomic migration runner with a checksum ledger and advisory lock, eleven PostgreSQL integration tests, two database error tests and a PostgreSQL-backed GitHub Actions job. Existing migration transaction wrappers were moved into the runner to keep schema and ledger writes atomic. Database connection failures now return a sanitized 503. The temporary PostgreSQL package could not start because socket creation is denied in this local execution environment. Local integration checks are skipped; remote CI results must be inspected before claiming they passed. Milestone 13 remains in progress because financial/dispute flows are still absent.

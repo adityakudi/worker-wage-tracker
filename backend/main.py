@@ -5,6 +5,12 @@ from fastapi.responses import JSONResponse
 
 app = FastAPI(title="Worker Attendance & Wage Tracker")
 
+@app.exception_handler(psycopg.OperationalError)
+async def database_unavailable(request, exception):
+    # Do not disclose connection strings, hosts or driver internals to callers.
+    return JSONResponse(status_code=503, content={"detail": "Database temporarily unavailable"})
+
+
 @app.get("/health")
 def health():
     url = os.getenv("DATABASE_URL")

@@ -1,4 +1,3 @@
-BEGIN;
 CREATE TABLE memberships (
  id uuid PRIMARY KEY,
  contractor_id uuid NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
@@ -12,4 +11,3 @@ CREATE TABLE memberships (
  CHECK((status='accepted')=(accepted_at IS NOT NULL))
 );
 CREATE INDEX memberships_worker ON memberships(worker_id,created_at,id);
-COMMIT;

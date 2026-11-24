@@ -1,4 +1,3 @@
-BEGIN;
 CREATE TABLE users (
  id uuid PRIMARY KEY,
  email text NOT NULL UNIQUE CHECK (email = lower(email)),
@@ -6,4 +5,3 @@ CREATE TABLE users (
  role text NOT NULL CHECK (role IN ('worker','contractor')),
  created_at timestamptz NOT NULL DEFAULT now()
 );
-COMMIT;

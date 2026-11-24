@@ -1,4 +1,3 @@
-BEGIN;
 CREATE TABLE worksites (
  id uuid PRIMARY KEY,
  contractor_id uuid NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
@@ -9,4 +8,3 @@ CREATE TABLE worksites (
  UNIQUE (id,contractor_id)
 );
 CREATE INDEX worksites_owner_name ON worksites(contractor_id,name,id);
-COMMIT;
