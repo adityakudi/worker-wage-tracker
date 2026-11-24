@@ -22,8 +22,12 @@ The CI workflow `.github/workflows/verify.yml` provisions a disposable PostgreSQ
 
 ## Outstanding coverage
 
-Attendance, wage snapshots/calculations, advances, payments, ledger reversals and disputes are not yet implemented, so their acceptance checks cannot pass. Browser end-to-end checks against the database-backed API and a full live deployment are also pending. The sample frontend showcase is not proof of those features.
+Integer-paise wage and statement calculations now have eight passing unit tests, including the required earnings/advance/payment example, rounding, cutoffs and reversal arithmetic. Persistent attendance, wage agreements, advances/payments, uniqueness guarantees and disputes remain unimplemented; those end-to-end acceptance checks cannot pass. Browser end-to-end checks against the database-backed API and a full live deployment are also pending. The sample frontend showcase is not proof of those features.
 
 ## Migration handling
 
 `python -m backend.migrate` applies each SQL file and checksum ledger entry in one transaction. Repeated runs skip unchanged migrations. Edited applied files cause an explicit error; add a new numbered migration for later changes. Databases created from earlier raw SQL need a reviewed baseline rather than automatic adoption. Migration checksums are computed on exact file bytes.
+
+## Recorded evidence — 24 November 2026
+
+[PostgreSQL CI run 45411066973](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45411066973) passed 25 tests with no skips and built the frontend at commit 7d770721bc04ecfd4e9a7b72caa333d91e10f6a9. The expanded wage suite adds eight checks; local execution passed 22 with 11 database checks skipped because this execution environment denies server socket creation. Refer to the current commit's Actions run for the combined result.

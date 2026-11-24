@@ -4,7 +4,7 @@ A mobile-friendly platform for daily-wage workers and contractors to maintain sh
 
 ## Status
 
-Planning, authentication and initial worksite APIs are implemented. Database-backed integration, related entity APIs, frontend end-to-end checks, pilot validation and deployment remain pending. This repository starts from scratch.
+Authentication, worksite CRUD and worker invitations now have passing PostgreSQL-backed integration checks in CI. Integer-paise wage calculations have unit coverage. Assignments, wage agreements, persistent attendance/payments, disputes, backend deployment and pilot validation remain pending. This repository starts from scratch.
 
 ## Problem and users
 

@@ -8,17 +8,17 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 |---|---|---|---|---|
 | 1 | Plan | Define the problem, contractor and worker roles, ten MVP features, later features, and acceptance rules. | FEATURES.md and new GitHub repository | Done |
 | 2 | Design | Design PostgreSQL tables, relationships, constraints, and login, list, detail, dashboard wireframes. | Schema diagram and four wireframes in docs/ | In progress |
-| 3 | Setup | Initialise backend, connect PostgreSQL, configure environment variables, and add health endpoint. | Running backend and database-connected /health | In progress |
+| 3 | Setup | Initialise backend, connect PostgreSQL, configure environment variables, and add health endpoint. | Running backend and database-connected /health | Done |
 | 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | In progress |
-| 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | In progress |
-| 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | In progress |
+| 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | Done |
+| 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | Done |
 | 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | In progress |
 | 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | In progress |
 | 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | In progress |
 | 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | In progress |
 | 11 | Heavy feature backend | Implement acknowledgement, disputes, responses, correction proposals, and immutable audit records. | Heavy feature backend verified | Not started |
 | 12 | Heavy feature UI | Connect worker dispute and contractor response screens; worker confirms resolution. | Complete end-to-end dispute demonstration | Not started |
-| 13 | Testing | Test main flows and bad input; cover wage maths, access isolation, duplicate attendance, reversals, and disputes. | At least five passing API tests and resolved main-flow bugs | Not started |
+| 13 | Testing | Test main flows and bad input; cover wage maths, access isolation, duplicate attendance, reversals, and disputes. | At least five passing API tests and resolved main-flow bugs | In progress |
 | 14 | Deployment | Deploy frontend, backend, and PostgreSQL on free hosting; configure secrets through environment. | Public URL verified for another user | Not started |
 | 15 | Ship | Write README run steps and learning section, add screenshots, record two-minute demo, and prepare launch post. | README, screenshots, real demo video, and published LinkedIn link | Not started |
 
@@ -64,3 +64,8 @@ Published LinkedIn progress post: https://www.linkedin.com/feed/update/urn:li:ac
 
 ## 24 November 2026 — verification
 Added an atomic migration runner with a checksum ledger and advisory lock, eleven PostgreSQL integration tests, two database error tests and a PostgreSQL-backed GitHub Actions job. Existing migration transaction wrappers were moved into the runner to keep schema and ledger writes atomic. Database connection failures now return a sanitized 503. The temporary PostgreSQL package could not start because socket creation is denied in this local execution environment. Local integration checks are skipped; remote CI results must be inspected before claiming they passed. Milestone 13 remains in progress because financial/dispute flows are still absent.
+
+### Verified database evidence
+The PostgreSQL-backed CI run [45411066973](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45411066973) passed all 25 API/unit checks without skips and built the frontend. It ran source commit [7d77072](https://github.com/adityakudi/worker-wage-tracker/commit/7d770721bc04ecfd4e9a7b72caa333d91e10f6a9). This supersedes earlier notes that database success paths were unverified. Milestones 3, 5 and 6 now have database-backed acceptance evidence; milestone 5 also has the published LinkedIn URL recorded above. Signup is API-tested, but milestone 4's explicit Postman execution remains pending.
+
+Added integer-paise wage rules and eight tests covering the specification's INR 600 outstanding example, half-paise rounding, advances counted once, negative opening balances, inclusive cutoffs, invalid inputs and reversal arithmetic. These functions are not yet wired to persistent attendance/payment APIs. Local checks: 22 passed, 11 PostgreSQL checks skipped locally; the preceding remote PostgreSQL run passed those 11. The expanded CI suite must be checked on the new commit. Milestone 13 remains in progress, with unfinished financial/dispute features explicitly open.
