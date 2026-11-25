@@ -76,4 +76,4 @@ Ask one contractor and two or three workers how they record attendance, agree ra
 - README includes “What I built and what I understood”.
 
 ## Current status
-Specification drafted. Project name is provisional. Repository: https://github.com/adityakudi/worker-wage-tracker. User validation and implementation remain pending. No previous project's code or progress is being reused.
+As of 25 November 2026: authentication, worksite CRUD, invitations and integer-paise calculation rules have automated verification. Deployment configuration is prepared, but public deployment is blocked on Render workspace confirmation. Assignments, acknowledged wage agreements, persistent attendance/ledger/disputes and user validation remain pending. See README.md and docs/BUILD_PLAN.md for current evidence. Repository: https://github.com/adityakudi/worker-wage-tracker. No previous project's code or progress is being reused.

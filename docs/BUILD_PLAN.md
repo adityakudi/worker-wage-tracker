@@ -19,12 +19,12 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | 11 | Heavy feature backend | Implement acknowledgement, disputes, responses, correction proposals, and immutable audit records. | Heavy feature backend verified | Not started |
 | 12 | Heavy feature UI | Connect worker dispute and contractor response screens; worker confirms resolution. | Complete end-to-end dispute demonstration | Not started |
 | 13 | Testing | Test main flows and bad input; cover wage maths, access isolation, duplicate attendance, reversals, and disputes. | At least five passing API tests and resolved main-flow bugs | In progress |
-| 14 | Deployment | Deploy frontend, backend, and PostgreSQL on free hosting; configure secrets through environment. | Public URL verified for another user | Not started |
+| 14 | Deployment | Deploy frontend, backend, and PostgreSQL on free hosting; configure secrets through environment. | Public URL verified for another user | In progress — workspace confirmation blocked |
 | 15 | Ship | Write README run steps and learning section, add screenshots, record two-minute demo, and prepare launch post. | README, screenshots, real demo video, and published LinkedIn link | Not started |
 
 ## Progress and evidence
 
-Day 1 specification: [requirements commit](https://github.com/adityakudi/worker-wage-tracker/commit/c375aacc9331473f2c6f259732cd45d75b3467a3), completed 17 November 2026 (Asia/Kolkata). No application code has been implemented yet.
+Day 1 specification: [requirements commit](https://github.com/adityakudi/worker-wage-tracker/commit/c375aacc9331473f2c6f259732cd45d75b3467a3), completed 17 November 2026 (Asia/Kolkata). No application code had been implemented at that point.
 
 Update each milestone only after checking its deliverables. Record its actual completion date and commit URL here. Future commits must contain real work, with no fabricated or backdated history.
 
@@ -69,3 +69,30 @@ Added an atomic migration runner with a checksum ledger and advisory lock, eleve
 The PostgreSQL-backed CI run [45411066973](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45411066973) passed all 25 API/unit checks without skips and built the frontend. It ran source commit [7d77072](https://github.com/adityakudi/worker-wage-tracker/commit/7d770721bc04ecfd4e9a7b72caa333d91e10f6a9). This supersedes earlier notes that database success paths were unverified. Milestones 3, 5 and 6 now have database-backed acceptance evidence; milestone 5 also has the published LinkedIn URL recorded above. Signup is API-tested, but milestone 4's explicit Postman execution remains pending.
 
 Added integer-paise wage rules and eight tests covering the specification's INR 600 outstanding example, half-paise rounding, advances counted once, negative opening balances, inclusive cutoffs, invalid inputs and reversal arithmetic. These functions are not yet wired to persistent attendance/payment APIs. Local checks: 22 passed, 11 PostgreSQL checks skipped locally; the preceding remote PostgreSQL run passed those 11. The expanded CI suite must be checked on the new commit. Milestone 13 remains in progress, with unfinished financial/dispute features explicitly open.
+
+## Actual execution schedule
+
+These dates group work into ten calendar days while retaining all fifteen milestones above. They are targets, not claims of completion.
+
+| Actual date in 2026 | Planned milestones |
+|---|---|
+| 17 November | 1 — requirements |
+| 18 November | 2–3 — schema, four wireframes, setup and database health |
+| 19 November | 4–5 — signup, hashing, JWT and protected routes |
+| 20 November | 6–7 — authenticated CRUD, relationships and paginated search |
+| 21 November | 8–9 — frontend authentication and live lists/details |
+| 22 November | 10 — management, attendance and payment UI |
+| 23 November | 11–12 — acknowledgement and dispute backend/UI |
+| 24 November | 13 — tests and fixes |
+| 25 November | 14 — deploy and verify |
+| 26 November | 15 — README, screenshots, two-minute demo and launch materials |
+
+## 25 November 2026 — deployment preparation
+
+Prepared a multi-stage, non-root Docker image with the built React frontend, FastAPI API under `/api`, environment-driven startup and atomic migrations before serving traffic. Existing development API paths remain supported. Added four static/API boundary checks and a production-image HTTP smoke script. CI now builds and boots the image against disposable PostgreSQL, exercises authenticated worksite and invitation flows, then restarts it to check migration replay and readiness.
+
+Local verification: 26 tests passed; eleven database integration checks were explicitly skipped because no local PostgreSQL service is available. Frontend production build passed. `render.yaml` passed validation against Render's published JSON schema. The new container/database CI checks are pending until their Actions run is inspected.
+
+Render access is available, but service inventory was rejected because no workspace is selected. The connector requires the user to confirm a workspace; the sole returned option is **My Workspace**. No workspace was chosen automatically, no infrastructure was created and no paid plan was requested. See [DEPLOYMENT.md](DEPLOYMENT.md). Milestone 14 stays in progress until a public frontend/API/database deployment and independent-user access are verified.
+
+Carry-forward gaps: milestone 2 visual design evidence, milestone 4 Postman execution, assignment/wage agreements, persistent attendance/advances/payments/reversals, disputes and full browser flows remain unfinished. The 26 November target is at risk; missing work must not be relabelled complete for the deadline. Track B remains separate.

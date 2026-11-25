@@ -4,7 +4,7 @@ A mobile-friendly platform for daily-wage workers and contractors to maintain sh
 
 ## Status
 
-Authentication, worksite CRUD and worker invitations now have passing PostgreSQL-backed integration checks in CI. Integer-paise wage calculations have unit coverage. Assignments, wage agreements, persistent attendance/payments, disputes, backend deployment and pilot validation remain pending. This repository starts from scratch.
+Authentication, worksite CRUD and worker invitations have passing PostgreSQL-backed integration checks in CI. Integer-paise wage calculations have unit coverage. A combined frontend/API Docker image and free Render Blueprint are prepared; public deployment is blocked on Render workspace confirmation. Assignments, wage agreements, persistent attendance/payments, disputes and pilot validation remain pending. This repository starts from scratch.
 
 ## Problem and users
 
@@ -24,7 +24,7 @@ See [FEATURES.md](FEATURES.md) for the ten-feature MVP, calculation rules, acces
 
 ## Planned stack
 
-React with Vite, FastAPI, and PostgreSQL. Money is stored as integer paise; work dates use Asia/Kolkata. Implementation dependencies will be selected during setup.
+React with Vite, FastAPI, and PostgreSQL. Money calculations use integer paise; work dates follow Asia/Kolkata. Persistent financial records are still planned.
 
 ## 15-day plan
 
@@ -44,7 +44,7 @@ Auth, worksite, membership and database error checks are in backend/tests. Miles
 
 ## Screenshots, deployment, and demo
 
-Pending working software. Real screenshots, the verified public URL, and a two-minute demo will be added during delivery.
+See [deployment setup and blocker](docs/DEPLOYMENT.md) for the combined service, migration startup, environment configuration and verification commands. No public backend/database URL has been verified. The existing frontend captures and one-minute showcase do not count as a complete two-minute product demonstration.
 
 ## What I built and what I understood
 
@@ -52,7 +52,7 @@ Day 1: defined the problem hypothesis, contractor and worker roles, MVP boundari
 
 ## Frontend development
 
-Run `npm ci --prefix frontend` then `npm run dev --prefix frontend`. Start backend from repository root with `uvicorn backend.main:app`. Vite proxies auth and worksite requests to port 8000. `npm run build --prefix frontend` builds static assets. Production hosting must proxy these API paths; no production routing has been configured yet.
+Run `npm ci --prefix frontend` then `npm run dev --prefix frontend`. Start backend from repository root with `uvicorn backend.main:app`. Vite proxies auth, worksite, membership and `/api` requests to port 8000. For the combined production service, build with `VITE_API_BASE_URL=/api npm run build --prefix frontend`; FastAPI serves `frontend/dist` and the authenticated API under `/api`. The Docker build sets this variable automatically. It is a public build setting; never put database credentials or JWT secrets in a `VITE_` variable.
 
 ## Redesigned frontend and showcase
 

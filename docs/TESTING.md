@@ -28,6 +28,10 @@ Integer-paise wage and statement calculations now have eight passing unit tests,
 
 `python -m backend.migrate` applies each SQL file and checksum ledger entry in one transaction. Repeated runs skip unchanged migrations. Edited applied files cause an explicit error; add a new numbered migration for later changes. Databases created from earlier raw SQL need a reviewed baseline rather than automatic adoption. Migration checksums are computed on exact file bytes.
 
+## Production routing and image checks — 25 November 2026
+
+Four additional tests cover frontend/static asset serving, authentication on original and `/api` routes, unknown/private path 404s, and database health failure through the static mount. The workflow also builds the non-root production image, starts it against disposable PostgreSQL, runs `scripts/smoke_deployment.py --exercise-api`, restarts it and repeats read-only smoke checks. Those HTTP checks cover real packaged signup/login, identity, worksite CRUD/search/ownership and invitation acceptance. They do not execute a browser or unimplemented financial workflows. See [DEPLOYMENT.md](DEPLOYMENT.md) for usage and write-mode restrictions.
+
 ## Recorded evidence — 24 November 2026
 
 [PostgreSQL CI run 45411066973](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45411066973) passed 25 tests with no skips and built the frontend at commit 7d770721bc04ecfd4e9a7b72caa333d91e10f6a9. The expanded wage suite adds eight checks; local execution passed 22 with 11 database checks skipped because this execution environment denies server socket creation. Refer to the current commit's Actions run for the combined result.
