@@ -27,7 +27,7 @@ class ProductionRouteTests(unittest.TestCase):
 
     def test_api_is_protected_in_both_namespaces(self):
         for prefix in ('', '/api'):
-            for path in ('/auth/me', '/worksites', '/memberships'):
+            for path in ('/auth/me', '/worksites', '/memberships', '/assignments'):
                 result = self.client.get(prefix + path)
                 self.assertEqual(result.status_code, 401, (prefix, path, result.text))
                 self.assertEqual(result.headers['content-type'], 'application/json')

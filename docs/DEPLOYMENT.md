@@ -26,7 +26,7 @@ python scripts/smoke_deployment.py --url https://<actual-service-hostname>
 
 This default mode is read-only: it verifies database-connected health, the frontend and its built assets, unauthenticated API rejection, unknown-route 404s and private source-file boundaries. It does not prove browser interactions or all requirements.
 
-CI uses a disposable PostgreSQL service and builds this exact Dockerfile. It starts the image, waits for `/health`, runs the same script with `--exercise-api`, restarts the image, then repeats read-only checks. The write mode creates three synthetic accounts and an accepted invitation; it deletes its temporary worksite but leaves those synthetic accounts/membership. **Use write mode only against a disposable test database.** It verifies signup/login/identity, worksite CRUD/search/ownership and worker invitation acceptance over the production HTTP paths.
+CI uses a disposable PostgreSQL service and builds this exact Dockerfile. It starts the image, waits for `/health`, runs the same script with `--exercise-api`, restarts the image, then repeats read-only checks. The write mode creates three synthetic accounts, an accepted invitation, an assignment and an acknowledged wage agreement. It deletes an unassigned temporary worksite, but retains the assigned worksite and its history. **Use write mode only against a disposable test database.** It verifies signup/login/identity, worksite CRUD/search/ownership, invitation acceptance and assignment/rate acknowledgement over the production HTTP paths.
 
 Before marking milestone 14 done, record the deployed commit, real public URL, successful live checks and a browser signup/login/worksite flow from another user/session. Capture meaningful failures and fixes. A passing CI container is deployment preparation, not public-hosting evidence.
 
@@ -45,6 +45,6 @@ docker run --rm -p 8000:8000 --env DATABASE_URL --env JWT_SECRET worker-wage-tra
 
 Render's current free-hosting documentation says free web services spin down after 15 idle minutes and free PostgreSQL databases expire after 30 days. Plan exports before expiration; this free setup is for a prototype, with sample data. Do not silently upgrade plans or add payment details to overcome limits.
 
-Assignments, acknowledged wage agreements, persistent attendance and ledger entries, reversals, disputes, full browser verification and pilot validation are still missing. Hosting the existing subset cannot satisfy those acceptance checks.
+Assignments and acknowledged wage agreements are implemented as API carry-forward work; the new PostgreSQL checks are pending. Their UI, persistent attendance and ledger entries, reversals, disputes, full browser verification and pilot validation are still missing. Hosting the existing subset cannot satisfy those acceptance checks.
 
 References checked 25 November 2026: [Blueprint specification](https://render.com/docs/blueprint-spec), [JSON schema](https://render.com/schema/render.yaml.json), [free hosting](https://render.com/docs/free), [health checks](https://render.com/docs/health-checks), [deploys](https://render.com/docs/deploys). The Blueprint passed local JSON-schema validation; Render account-level planning/application remains blocked.

@@ -26,6 +26,7 @@ def health():
 from backend.auth import router as auth_router
 from backend.worksites import router as worksites_router
 from backend.memberships import router as memberships_router
+from backend.assignments import router as assignments_router
 
 
 def create_app(frontend_dir: Path | None = None) -> FastAPI:
@@ -33,7 +34,7 @@ def create_app(frontend_dir: Path | None = None) -> FastAPI:
     application.add_exception_handler(psycopg.OperationalError, database_unavailable)
     application.add_api_route('/health', health, methods=['GET'])
     application.add_api_route('/api/health', health, methods=['GET'], include_in_schema=False)
-    for router in (auth_router, worksites_router, memberships_router):
+    for router in (auth_router, worksites_router, memberships_router, assignments_router):
         # Keep existing development clients compatible; /api is the production origin.
         application.include_router(router)
         application.include_router(router, prefix='/api', include_in_schema=False)

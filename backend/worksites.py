@@ -1,4 +1,5 @@
 from uuid import UUID, uuid4
+import psycopg
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from backend.auth import current_user, connection
@@ -45,6 +46,9 @@ def update(worksite_id: UUID, body: Worksite, user=Depends(contractor)):
 
 @router.delete('/{worksite_id}',status_code=204)
 def delete(worksite_id: UUID,user=Depends(contractor)):
-    with connection() as db:
-        row=db.execute('DELETE FROM worksites WHERE id=%s AND contractor_id=%s RETURNING id',(worksite_id,user['id'])).fetchone()
+    try:
+        with connection() as db:
+            row=db.execute('DELETE FROM worksites WHERE id=%s AND contractor_id=%s RETURNING id',(worksite_id,user['id'])).fetchone()
+    except psycopg.errors.ForeignKeyViolation:
+        raise HTTPException(409,'Worksite has assignments; archive it instead')
     if not row: raise HTTPException(404,'Worksite not found')

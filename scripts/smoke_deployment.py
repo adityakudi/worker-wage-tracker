@@ -46,6 +46,7 @@ def verify(base_url: str, exercise_api: bool = False):
     request('/api/auth/me', expected=401)
     request('/api/worksites', expected=401)
     request('/api/memberships', expected=401)
+    request('/api/assignments', expected=401)
     request('/api/not-a-route', expected=404)
     request('/backend/auth.py', expected=404)
     request('/.env', expected=404)
@@ -83,7 +84,24 @@ def verify(base_url: str, exercise_api: bool = False):
         raise RuntimeError('Worker invitation was not accepted.')
     request(route, expected=204, method='DELETE', token=owner)
     request(route, expected=404, token=owner)
-    print('PASS: container signup/login, worksite CRUD/search/ownership, worker invitation/acceptance')
+    assigned_site = request('/api/worksites', expected=201, method='POST', token=owner,
+                            body={'name':'Assigned container site'})
+    assigned = request('/api/assignments', expected=201, method='POST', token=owner, body={
+        'membership_id':membership['id'], 'worksite_id':assigned_site['id'], 'start_date':'2026-11-17'})
+    request('/api/assignments/'+assigned['id'], expected=404, token=other)
+    request('/api/assignments/'+assigned['id'], token=worker_token)
+    wages = '/api/assignments/'+assigned['id']+'/wage-agreements'
+    proposed = request(wages, expected=201, method='POST', token=owner,
+                       body={'daily_rate_paise':60000, 'effective_from':'2026-11-17'})
+    if proposed['acknowledged_at'] is not None:
+        raise RuntimeError('New rate was acknowledged without worker action.')
+    ack_route = '/api/wage-agreements/'+proposed['id']+'/acknowledge'
+    request(ack_route, expected=403, method='POST', token=owner)
+    acknowledged = request(ack_route, method='POST', token=worker_token)
+    if acknowledged['acknowledged_by'] != worker['id']:
+        raise RuntimeError('Rate was not acknowledged by the assigned worker.')
+    request('/api/worksites/'+assigned_site['id'], expected=409, method='DELETE', token=owner)
+    print('PASS: container signup/login, worksite CRUD/search/ownership, invitation/acceptance, assignment/rate acknowledgement')
 
 
 if __name__ == '__main__':
