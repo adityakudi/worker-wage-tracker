@@ -27,6 +27,8 @@ def verify(base_url: str, exercise_api: bool = False):
             payload = response.read()
             if response.status != expected:
                 raise RuntimeError(f'{method} {path}: expected {expected}, received {response.status}')
+            if not payload:
+                return None
             if 'application/json' in response.headers.get('Content-Type', ''):
                 return json.loads(payload)
             return payload.decode()
