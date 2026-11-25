@@ -7,12 +7,12 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | Day milestone | Phase | Work | Evidence required | Status |
 |---|---|---|---|---|
 | 1 | Plan | Define the problem, contractor and worker roles, ten MVP features, later features, and acceptance rules. | FEATURES.md and new GitHub repository | Done |
-| 2 | Design | Design PostgreSQL tables, relationships, constraints, and login, list, detail, dashboard wireframes. | Schema diagram and four wireframes in docs/ | In progress |
+| 2 | Design | Design PostgreSQL tables, relationships, constraints, and login, list, detail, dashboard wireframes. | Schema diagram and four wireframes in docs/ | Done — 25 November 2026 |
 | 3 | Setup | Initialise backend, connect PostgreSQL, configure environment variables, and add health endpoint. | Running backend and database-connected /health | Done |
 | 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | In progress |
 | 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | Done |
 | 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | Done |
-| 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | In progress |
+| 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | Done — 25 November 2026 |
 | 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | In progress |
 | 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | In progress |
 | 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | In progress |
@@ -104,3 +104,11 @@ Added migration 004 and participant-scoped assignment and wage agreement APIs. A
 Added eight PostgreSQL acceptance checks, including concurrent same-date proposals, and expanded the production smoke flow for assignments and rate acknowledgement. Local run: 26 passed, 19 database checks skipped; remote CI must pass before milestone 7 is marked complete. The preceding deployment-only CI run [45635095940](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45635095940) passed at commit [62f0777](https://github.com/adityakudi/worker-wage-tracker/commit/62f07771de2c71578fabfe160265f0aa4fc207d0), including container startup, HTTP flows and restart. The first run exposed an empty-204 parsing error in the smoke script, which was corrected before that passing run.
 
 This carries assignments and wage agreements out of the earlier implementation gap once verified; attendance posting/rate snapshot integration, ledger, disputes and their UI remain open. All four requested LinkedIn drafts are now present, with accurate limitations and no new publication. The calendar-day-5 draft is labelled retrospective rather than backdated.
+
+### Verified acceptance and design evidence
+
+[CI run 45636316651](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45636316651) passed source [e3476b3](https://github.com/adityakudi/worker-wage-tracker/commit/e3476b31c605d35475d1916b7ee98351c496a0c3): **45 tests, no skips**, including nineteen real PostgreSQL checks. The production container build, migration startup, frontend/API smoke flow, assignment/rate acknowledgement and restart checks also passed. This supersedes the pending-check notes above. Milestone 7 is complete at API level on 25 November; its UI remains separate work under milestones 9–10.
+
+Created and rendered four SVG wireframes for login, attendance list, worker detail and dashboard, and visually checked all four for legible layout. They show proposed states and sample amounts, not implemented financial screens. Together with the schema diagram and constraint design in DATABASE_SCHEMA.md, these complete milestone 2's design evidence on 25 November. [WIREFRAMES.md](WIREFRAMES.md) links the assets. See [full verification record](VERIFICATION_2026-11-25.md).
+
+Remaining: milestone 4 Postman execution; full frontend/browser relationship flows; persistent attendance and ledger with snapshots, uniqueness and reversals; disputes/audit workflow; public deployment and independent-user access; pilot validation; real two-minute end-to-end product demo. Milestones 13–15 remain incomplete. No paid resources or new LinkedIn publications were created.

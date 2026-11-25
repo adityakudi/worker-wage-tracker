@@ -1,6 +1,6 @@
 # Day 2: Database design
 
-PostgreSQL design. Migrations 001–003 implement users, worksites and accepted memberships and have passing database checks. Migration 004 adds assignments and wage agreements on 25 November 2026; its acceptance checks are pending the new CI result. Attendance, ledger, disputes and audit tables below remain proposed.
+PostgreSQL design. Migrations 001–004 implement users, worksites, accepted memberships, assignments and wage agreements and have passing database checks as of 25 November 2026. Attendance, ledger, disputes and audit tables below remain proposed. See [verification evidence](VERIFICATION_2026-11-25.md).
 
 ```mermaid
 erDiagram

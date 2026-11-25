@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="900" viewBox="0 0 440 900"><rect width="440" height="900" fill="#f2f2f2"/><rect x="16" y="16" width="408" height="868" rx="24" fill="white" stroke="#222" stroke-width="2"/>
+<style>text{font-family:Arial,sans-serif;fill:#222}.small{font-size:12px}.body{font-size:14px}.heading{font-size:24px;font-weight:bold}</style>
+<text x="36" y="52" class="small">WORKER WAGE TRACKER · PLANNED DESIGN</text>
+<text x="36" y="94" class="heading">Worker record</text>
+<text x="36" y="122" class="body">Worker view · own records only</text>
+<rect x="36" y="150" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="179" class="body">Jaya · agreed rate: INR 600 / day</text>
+<rect x="36" y="218" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="247" class="body">Earned INR 2,100 · paid/advanced INR 1,500</text>
+<rect x="36" y="296" width="368" height="60" rx="6" fill="#e5e5e5" stroke="#888"/>
+<text x="48" y="325" class="body">Outstanding: INR 600</text>
+<text x="36" y="398" class="body">Timeline · November 2026</text>
+<rect x="36" y="422" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="451" class="body">3 full days + 1 half day: INR 2,100</text>
+<rect x="36" y="484" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="513" class="body">Advance INR 500 · wage payment INR 1,000</text>
+<rect x="36" y="546" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="575" class="body">Disputed entry · amount remains recorded</text>
+<rect x="36" y="632" width="368" height="48" rx="6" fill="#dedede" stroke="#888"/>
+<text x="48" y="661" class="body">Review / acknowledge / dispute an entry</text>
+<rect x="36" y="696" width="368" height="48" rx="6" fill="#dedede" stroke="#888"/>
+<text x="48" y="725" class="body">Export monthly statement</text>
+<text x="36" y="786" class="small">Review acknowledgement ≠ payment receipt.</text>
+<text x="36" y="840" class="small">Contractor variant: record payment after amount/date review</text>
+<text x="36" y="862" class="small">Wireframe only · sample data · not a product screenshot</text>
+</svg>

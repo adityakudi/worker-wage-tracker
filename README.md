@@ -4,7 +4,7 @@ A mobile-friendly platform for daily-wage workers and contractors to maintain sh
 
 ## Status
 
-Authentication, worksite CRUD and worker invitations have passing PostgreSQL-backed integration checks in CI. Integer-paise wage calculations have unit coverage. A combined frontend/API Docker image and free Render Blueprint are prepared; public deployment is blocked on Render workspace confirmation. Assignments, wage agreements, persistent attendance/payments, disputes and pilot validation remain pending. This repository starts from scratch.
+Authentication, worksite CRUD, accepted worker invitations, assignments and immutable wage agreements have passing PostgreSQL-backed checks. Integer-paise calculations have unit coverage. CI also boots and restarts the combined frontend/API container and exercises it over HTTP. A free Render Blueprint is prepared, but public deployment is blocked on Render workspace confirmation. Persistent attendance/payments, disputes, relationship-management UI and pilot validation remain pending. This repository starts from scratch.
 
 ## Problem and users
 
@@ -42,6 +42,8 @@ Run `python -m unittest discover -s backend/tests -v`. Set `TEST_DATABASE_URL` t
 
 Auth, worksite, membership and database error checks are in backend/tests. Milestone 13 requires at least five API tests, including meaningful money and access-control coverage.
 
+Latest recorded result: [45 passing checks, no skips, plus production-container smoke and restart](docs/VERIFICATION_2026-11-25.md). See the [assignment/rate API](docs/ASSIGNMENTS_API.md) and [four planned screen wireframes](docs/WIREFRAMES.md). These design assets are not screenshots of implemented financial flows.
+
 ## Screenshots, deployment, and demo
 
 See [deployment setup and blocker](docs/DEPLOYMENT.md) for the combined service, migration startup, environment configuration and verification commands. No public backend/database URL has been verified. The existing frontend captures and one-minute showcase do not count as a complete two-minute product demonstration.
@@ -49,6 +51,8 @@ See [deployment setup and blocker](docs/DEPLOYMENT.md) for the combined service,
 ## What I built and what I understood
 
 Day 1: defined the problem hypothesis, contractor and worker roles, MVP boundaries, and acceptance checks. The design separates review acknowledgement from payment receipt, snapshots historical wage rates, and uses reversals so corrections preserve an audit trail. Implementation and first-hand learning will be recorded as milestones are completed.
+
+25 November: implemented the assignment/rate prerequisite and tested how membership acceptance, composite ownership constraints and worker-only acknowledgement protect shared wage terms. Packaging the frontend and API together also made routing, migrations and restart behavior part of the CI checks. Attendance snapshots and ledger reversals remain planned rather than claimed as working features.
 
 ## Frontend development
 

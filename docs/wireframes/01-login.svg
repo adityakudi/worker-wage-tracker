@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="900" viewBox="0 0 440 900"><rect width="440" height="900" fill="#f2f2f2"/><rect x="16" y="16" width="408" height="868" rx="24" fill="white" stroke="#222" stroke-width="2"/>
+<style>text{font-family:Arial,sans-serif;fill:#222}.small{font-size:12px}.body{font-size:14px}.heading{font-size:24px;font-weight:bold}</style>
+<text x="36" y="52" class="small">WORKER WAGE TRACKER · PLANNED DESIGN</text>
+<text x="36" y="94" class="heading">Sign in</text>
+<text x="36" y="122" class="body">A shared record of work and wages</text>
+<rect x="36" y="150" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="179" class="body">Language: English / Hindi</text>
+<text x="36" y="236" class="body">Email address</text>
+<rect x="36" y="250" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="279" class="body">worker@example.com</text>
+<text x="36" y="330" class="body">Password</text>
+<rect x="36" y="344" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="373" class="body">••••••••••••</text>
+<rect x="36" y="420" width="368" height="48" rx="6" fill="#dedede" stroke="#888"/>
+<text x="48" y="449" class="body">Sign in</text>
+<text x="36" y="500" class="body">New here? Create a worker or contractor account</text>
+<rect x="36" y="536" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="565" class="body">Submitting: disable the sign-in button</text>
+<rect x="36" y="614" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="643" class="body">Error: Check your email and password</text>
+<text x="36" y="724" class="small">Network failure keeps entered email visible.</text>
+<text x="36" y="840" class="small">Accessible labels · keyboard input · clear error feedback</text>
+<text x="36" y="862" class="small">Wireframe only · sample data · not a product screenshot</text>
+</svg>

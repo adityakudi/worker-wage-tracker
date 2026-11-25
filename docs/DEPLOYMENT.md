@@ -45,6 +45,6 @@ docker run --rm -p 8000:8000 --env DATABASE_URL --env JWT_SECRET worker-wage-tra
 
 Render's current free-hosting documentation says free web services spin down after 15 idle minutes and free PostgreSQL databases expire after 30 days. Plan exports before expiration; this free setup is for a prototype, with sample data. Do not silently upgrade plans or add payment details to overcome limits.
 
-Assignments and acknowledged wage agreements are implemented as API carry-forward work; the new PostgreSQL checks are pending. Their UI, persistent attendance and ledger entries, reversals, disputes, full browser verification and pilot validation are still missing. Hosting the existing subset cannot satisfy those acceptance checks.
+Assignments and acknowledged wage agreements have passing PostgreSQL and container HTTP checks. Their UI, persistent attendance and ledger entries, reversals, disputes, full browser verification and pilot validation are still missing. Hosting the existing subset cannot satisfy those acceptance checks. See [25 November verification](VERIFICATION_2026-11-25.md).
 
 References checked 25 November 2026: [Blueprint specification](https://render.com/docs/blueprint-spec), [JSON schema](https://render.com/schema/render.yaml.json), [free hosting](https://render.com/docs/free), [health checks](https://render.com/docs/health-checks), [deploys](https://render.com/docs/deploys). The Blueprint passed local JSON-schema validation; Render account-level planning/application remains blocked.

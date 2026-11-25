@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="900" viewBox="0 0 440 900"><rect width="440" height="900" fill="#f2f2f2"/><rect x="16" y="16" width="408" height="868" rx="24" fill="white" stroke="#222" stroke-width="2"/>
+<style>text{font-family:Arial,sans-serif;fill:#222}.small{font-size:12px}.body{font-size:14px}.heading{font-size:24px;font-weight:bold}</style>
+<text x="36" y="52" class="small">WORKER WAGE TRACKER · PLANNED DESIGN</text>
+<text x="36" y="94" class="heading">Dashboard</text>
+<text x="36" y="122" class="body">Contractor · summaries restricted to own team</text>
+<rect x="36" y="150" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="179" class="body">Overview | Worksites | Workers | Records</text>
+<rect x="36" y="218" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="247" class="body">Earned INR 2,100</text>
+<rect x="36" y="296" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="325" class="body">Advances + payments INR 1,500</text>
+<rect x="36" y="374" width="368" height="60" rx="6" fill="#e5e5e5" stroke="#888"/>
+<text x="48" y="403" class="body">Outstanding INR 600</text>
+<rect x="36" y="456" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="485" class="body">Search own workers or worksites</text>
+<text x="36" y="548" class="body">Recent activity</text>
+<rect x="36" y="570" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="599" class="body">Rate agreement acknowledged by worker</text>
+<rect x="36" y="632" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="661" class="body">One disputed entry needs a response</text>
+<rect x="36" y="710" width="368" height="48" rx="6" fill="#dedede" stroke="#888"/>
+<text x="48" y="739" class="body">Open attendance / payment management</text>
+<text x="36" y="840" class="small">Worker variant: own balances only · loading/empty/error states</text>
+<text x="36" y="862" class="small">Wireframe only · sample data · not a product screenshot</text>
+</svg>

@@ -24,7 +24,7 @@ I'd like feedback from contractors and workers on how they currently record atte
 
 Progress on Worker Attendance & Wage Tracker: authentication, contractor-owned worksite APIs and accepted worker invitations have passing PostgreSQL-backed checks. The React interface includes live authentication/worksite forms and a clearly labelled sample-data showcase.
 
-The deployment configuration is prepared, but a public deployment has not yet been verified. Assignments, wage agreements, persistent attendance/payments and disputes still need implementation. I'm keeping the milestone log tied to tested work and actual completion dates.
+Assignments and immutable wage agreements now have worker-only acknowledgement and passing PostgreSQL checks. The production container also passes HTTP smoke checks and restart verification. Public deployment is blocked on Render workspace confirmation. Relationship-management UI, persistent attendance/payments and disputes still need implementation. I'm keeping the milestone log tied to tested work and actual completion dates.
 
 Source: https://github.com/adityakudi/worker-wage-tracker
 

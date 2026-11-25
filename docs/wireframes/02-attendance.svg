@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="900" viewBox="0 0 440 900"><rect width="440" height="900" fill="#f2f2f2"/><rect x="16" y="16" width="408" height="868" rx="24" fill="white" stroke="#222" stroke-width="2"/>
+<style>text{font-family:Arial,sans-serif;fill:#222}.small{font-size:12px}.body{font-size:14px}.heading{font-size:24px;font-weight:bold}</style>
+<text x="36" y="52" class="small">WORKER WAGE TRACKER · PLANNED DESIGN</text>
+<text x="36" y="94" class="heading">Attendance</text>
+<text x="36" y="122" class="body">Contractor · own team only</text>
+<rect x="36" y="150" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="179" class="body">Worksite: Jaipur site</text>
+<rect x="36" y="212" width="368" height="48" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="241" class="body">Work date: 24 November 2026</text>
+<text x="36" y="304" class="body">Worker</text>
+<rect x="36" y="326" width="368" height="64" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="355" class="body">Jaya</text>
+<rect x="36" y="408" width="368" height="64" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="437" class="body">Kiran</text>
+<rect x="36" y="490" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="519" class="body">New worker: agreed rate pending</text>
+<text x="36" y="578" class="small">Posting disabled for unacknowledged rates.</text>
+<rect x="36" y="610" width="368" height="48" rx="6" fill="#dedede" stroke="#888"/>
+<text x="48" y="639" class="body">Review and post eligible attendance</text>
+<rect x="36" y="688" width="368" height="60" rx="6" fill="#fafafa" stroke="#888"/>
+<text x="48" y="717" class="body">Duplicate date: open the existing record</text>
+<text x="36" y="786" class="body">Previous     Page 1 of 2     Next</text>
+<text x="36" y="840" class="small">Other states: empty team · invalid date · network error</text>
+<text x="36" y="862" class="small">Wireframe only · sample data · not a product screenshot</text>
+<text x="208" y="304" class="small">Absent</text><text x="270" y="304" class="small">Half</text><text x="332" y="304" class="small">Full</text><circle cx="228" cy="358" r="8" stroke="#444" fill="white"/><circle cx="288" cy="358" r="8" stroke="#444" fill="white"/><circle cx="348" cy="358" r="8" stroke="#444" fill="white"/><circle cx="348" cy="358" r="4" fill="#222"/><circle cx="228" cy="440" r="8" stroke="#444" fill="white"/><circle cx="288" cy="440" r="8" stroke="#444" fill="white"/><circle cx="288" cy="440" r="4" fill="#222"/><circle cx="348" cy="440" r="8" stroke="#444" fill="white"/></svg>

@@ -1,6 +1,6 @@
 # Assignments and wage agreements
 
-Implemented 25 November 2026 as carry-forward work for milestone 7. PostgreSQL acceptance evidence must be recorded after the new CI run passes. These APIs do not record attendance or payments.
+Implemented and verified 25 November 2026 as carry-forward work for milestone 7. [CI evidence](VERIFICATION_2026-11-25.md) includes PostgreSQL acceptance and production-container HTTP checks. These APIs do not record attendance or payments.
 
 All calls require a Bearer JWT. Routes below are available both directly for development and under `/api` in the combined production service.
 
