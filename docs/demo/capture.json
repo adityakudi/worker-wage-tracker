@@ -1,0 +1,14 @@
+{
+  "source_commit": "7080b89a53562256519039f1aeb2b40add8a8492",
+  "capture_date": "2026-11-26",
+  "duration_target_seconds": 120,
+  "scope": "Browser-verified partial build; synthetic accounts; no financial workflow or public deployment",
+  "checks": [
+    "contractor signup",
+    "worksite create/search/detail/update/delete",
+    "sign out/login persistence",
+    "unauthenticated 401",
+    "worker signup",
+    "no browser page errors"
+  ]
+}
