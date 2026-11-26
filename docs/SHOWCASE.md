@@ -18,3 +18,7 @@ These are design-preview interactions. They do not establish completion of persi
 - Keyboard Escape closes the sample worker detail modal.
 - CSS includes mobile layouts and reduced-motion preferences. Small-screen viewport testing is still pending.
 - The showcase video uses captured frontend screens, animated title/caption treatments and an original synthesized ambient bed. It is a design showcase rather than a complete end-to-end product demo.
+
+## 26 November update
+
+The API/database and production container now have passing CI checks. Real browser signup/login and worksite CRUD also passed against disposable PostgreSQL. Six real screenshots and a verified two-minute partial-build recording are linked in README.md and VERIFICATION_2026-11-26.md. Public hosting and persistent financial features remain unfinished. The earlier sample-data showcase remains separate.

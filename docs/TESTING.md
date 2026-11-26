@@ -39,3 +39,7 @@ Eight more PostgreSQL checks verify accepted-membership and active-site prerequi
 ## Recorded evidence — 24 November 2026
 
 [PostgreSQL CI run 45411066973](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45411066973) passed 25 tests with no skips and built the frontend at commit 7d770721bc04ecfd4e9a7b72caa333d91e10f6a9. The expanded wage suite adds eight checks; local execution passed 22 with 11 database checks skipped because this execution environment denies server socket creation. Refer to the current commit's Actions run for the combined result.
+
+## Browser acceptance — 26 November 2026
+
+[Capture run 45840570781](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45840570781) passed the 45-test API suite and production-container checks, then real Chromium signup/login, persisted worksite CRUD and worker signup with no page errors. Its verified screenshots and 120-second partial-build recording are committed. The signup role selector now has an explicit accessible name, fixing the issue found by the first browser attempt. See [dated evidence](VERIFICATION_2026-11-26.md). Complete financial/browser acceptance remains open.

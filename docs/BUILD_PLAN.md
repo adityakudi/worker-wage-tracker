@@ -13,14 +13,14 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | Done |
 | 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | Done |
 | 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | Done — 25 November 2026 |
-| 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | In progress |
+| 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | Done — 26 November 2026 |
 | 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | In progress |
 | 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | In progress |
 | 11 | Heavy feature backend | Implement acknowledgement, disputes, responses, correction proposals, and immutable audit records. | Heavy feature backend verified | Not started |
 | 12 | Heavy feature UI | Connect worker dispute and contractor response screens; worker confirms resolution. | Complete end-to-end dispute demonstration | Not started |
 | 13 | Testing | Test main flows and bad input; cover wage maths, access isolation, duplicate attendance, reversals, and disputes. | At least five passing API tests and resolved main-flow bugs | In progress |
 | 14 | Deployment | Deploy frontend, backend, and PostgreSQL on free hosting; configure secrets through environment. | Public URL verified for another user | In progress — workspace confirmation blocked |
-| 15 | Ship | Write README run steps and learning section, add screenshots, record two-minute demo, and prepare launch post. | README, screenshots, real demo video, and published LinkedIn link | Not started |
+| 15 | Ship | Write README run steps and learning section, add screenshots, record two-minute demo, and prepare launch post. | README, screenshots, real demo video, and published LinkedIn link | In progress — partial-build materials verified |
 
 ## Progress and evidence
 
@@ -112,3 +112,16 @@ This carries assignments and wage agreements out of the earlier implementation g
 Created and rendered four SVG wireframes for login, attendance list, worker detail and dashboard, and visually checked all four for legible layout. They show proposed states and sample amounts, not implemented financial screens. Together with the schema diagram and constraint design in DATABASE_SCHEMA.md, these complete milestone 2's design evidence on 25 November. [WIREFRAMES.md](WIREFRAMES.md) links the assets. See [full verification record](VERIFICATION_2026-11-25.md).
 
 Remaining: milestone 4 Postman execution; full frontend/browser relationship flows; persistent attendance and ledger with snapshots, uniqueness and reversals; disputes/audit workflow; public deployment and independent-user access; pilot validation; real two-minute end-to-end product demo. Milestones 13–15 remain incomplete. No paid resources or new LinkedIn publications were created.
+
+
+## 26 November 2026 — delivery work and honest handover
+
+[Source commit 7080b8](https://github.com/adityakudi/worker-wage-tracker/commit/7080b89a53562256519039f1aeb2b40add8a8492) passed [browser capture run 45840570781](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45840570781) and the separate [verification run 45840570786](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45840570786). Both ran the 45-test suite with nineteen PostgreSQL checks and no skips, followed by production-container smoke and restart verification.
+
+Real Chromium assertions passed for contractor signup, empty/live worksite list, creation/search/details/edit, logout/login retrieving the saved record, eligible deletion, unauthenticated 401 and worker signup. No browser page errors were recorded. This completes milestone 8 on 26 November. Milestones 9–10 remain in progress because relationship and financial UI flows are missing.
+
+Browser testing exposed the signup role selector's missing exact accessible name; it was fixed before the passing run. A subsequent recording attempt passed browser checks but failed video conversion because FFmpeg was missing; the dependency was added and the complete workflow passed. Six screenshots, capture metadata and a silent captioned MP4 were then committed as [actual generated evidence](https://github.com/adityakudi/worker-wage-tracker/commit/3be9822d3c013ca280eceec40524b94aa529b42e). FFprobe verified a duration of 120.000 seconds. Screenshots and sampled video frames were visually reviewed.
+
+README now includes precise setup commands, features/limitations, actual screenshots, stack, checks and learning notes. DEMO_SCRIPT.md explains the recording scope. REMAINING_WORK.md lists unfinished requirements and the implementation order. An additional 26 November LinkedIn progress draft is prepared; nothing was published today.
+
+The recording demonstrates the implemented authentication/worksite subset, not complete attendance/payment/dispute flows. Milestone 15 remains in progress. Milestones 4 and 9–15 still have gaps. The all-Track-A completion target is not met as of this run. Public deployment remains blocked by the unconfirmed Render workspace. No paid services were provisioned, completion dates were not fabricated, and Track B remains separate. See [26 November evidence](VERIFICATION_2026-11-26.md).
