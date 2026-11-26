@@ -76,6 +76,7 @@ jobs:
         run: |
           python -m pip install playwright
           python -m playwright install --with-deps chromium
+          sudo apt-get install -y ffmpeg
       - name: Verify browser flows and record the partial-build demo
         run: python scripts/capture_demo.py
       - name: Produce a two-minute MP4 and verify duration

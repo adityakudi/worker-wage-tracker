@@ -1,4 +1,6 @@
 """Capture real browser flows against a disposable CI database, never production."""
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import json
 import os
 from pathlib import Path
@@ -6,6 +8,7 @@ import time
 from uuid import uuid4
 from playwright.sync_api import sync_playwright, expect
 
+CAPTURE_DATE = datetime.now(ZoneInfo('Asia/Kolkata')).date().isoformat()
 OUTPUT = Path('docs/screenshots')
 OUTPUT.mkdir(parents=True, exist_ok=True)
 MEDIA = Path('docs/demo')
@@ -48,7 +51,7 @@ def capture():
             expect(page.get_by_role('button',name='Sign out',exact=True)).to_be_visible()
 
         page.goto('http://127.0.0.1:8080',wait_until='networkidle')
-        chapter('Worker Wage Tracker · development progress · 26 November 2026',
+        chapter('Worker Wage Tracker · development progress · '+CAPTURE_DATE,
                 'Real browser + disposable PostgreSQL. Partial build; no public deployment or live payroll.')
         screenshot('01-landing.png')
         until(12)
@@ -111,7 +114,7 @@ def capture():
         video.save_as(str(MEDIA/'browser-recording.webm'))
         browser.close()
         (MEDIA/'capture.json').write_text(json.dumps({'source_commit':os.environ.get('GITHUB_SHA'),
-            'capture_date':'2026-11-26','duration_target_seconds':120,
+            'capture_date':CAPTURE_DATE,'duration_target_seconds':120,
             'scope':'Browser-verified partial build; synthetic accounts; no financial workflow or public deployment',
             'checks':['contractor signup','worksite create/search/detail/update/delete','sign out/login persistence',
                       'unauthenticated 401','worker signup','no browser page errors']},indent=2)+'\n')
