@@ -2,7 +2,7 @@ name: Capture verified browser demo
 on:
   push:
     branches: [main]
-    paths: ['scripts/capture_demo.py', '.github/workflows/capture-demo.yml']
+    paths: ['scripts/capture_demo.py', '.github/workflows/capture-demo.yml', 'frontend/**']
 permissions:
   contents: write
 jobs:
