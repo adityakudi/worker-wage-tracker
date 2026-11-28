@@ -1,11 +1,8 @@
 name: Capture verified browser demo
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths: ['scripts/verify_release_browser.py', '.github/workflows/capture-demo.yml']
 permissions:
-  contents: write
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -96,16 +93,6 @@ jobs:
           name: verified-worker-wage-demo
           path: ${{ env.CAPTURE_DIR }}/
           retention-days: 90
-      - name: Commit verified release evidence
-        if: github.event_name == 'push'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$CAPTURE_DIR"
-          if ! git diff --cached --quiet; then
-            git commit -m "Save verified Track A browser screenshots and two-minute demo"
-            git push origin HEAD:main
-          fi
       - name: Container diagnostics and cleanup
         if: always()
         run: |

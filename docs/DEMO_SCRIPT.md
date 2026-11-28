@@ -19,3 +19,9 @@ The reproducible `scripts/capture_demo.py` drives Chromium against the actual pr
 The workflow checks browser assertions, collects page errors, records six PNG screenshots, converts the browser recording to a 120-second H.264 MP4, and verifies duration with ffprobe. Evidence is committed only after the workflow's API tests, container checks, browser assertions and video-duration check pass. Downloadable workflow artifacts provide an additional copy.
 
 The first proof is a successful workflow run, not the existence of this script. If capture fails, do not list generated files as verified deliverables. The full-product demo requirement stays open until the missing flows are implemented and demonstrated.
+
+## 29 November product walkthrough
+
+The recorded flow starts with the live login, then creates a contractor and worker, verifies worksite CRUD, and has the worker accept an invitation and a ₹600 daily rate. The contractor posts one full day and a ₹100 advance. The worker disputes the attendance, accepts a half-day correction, and exports a CSV that matches the ₹200 closing balance. A mobile browser checks the Hindi login.
+
+To reproduce against a disposable PostgreSQL database, start the combined service at port 8080, install Playwright and its Chromium browser, then run `python scripts/verify_release_browser.py --artifacts /tmp/wage-capture --record`. The capture workflow includes FFmpeg conversion and duration verification. [Screenshots and MP4](release-evidence/2026-11-29)

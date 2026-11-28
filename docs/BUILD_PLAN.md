@@ -9,18 +9,18 @@ The day numbers below identify the sheet's fifteen milestones. Work may be compl
 | 1 | Plan | Define the problem, contractor and worker roles, ten MVP features, later features, and acceptance rules. | FEATURES.md and new GitHub repository | Done |
 | 2 | Design | Design PostgreSQL tables, relationships, constraints, and login, list, detail, dashboard wireframes. | Schema diagram and four wireframes in docs/ | Done — 25 November 2026 |
 | 3 | Setup | Initialise backend, connect PostgreSQL, configure environment variables, and add health endpoint. | Running backend and database-connected /health | Done |
-| 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | In progress |
+| 4 | Signup | Implement user model, validation, password hashing, and signup. | Signup verified in Postman | Done — 29 November 2026 (Newman collection run) |
 | 5 | Login | Implement JWT login and role-protected routes. | 401 without valid token, authorised data with token; progress post | Done |
 | 6 | CRUD | Implement authenticated worksite create, read, update, and delete APIs. | Four CRUD operations with ownership checks | Done |
 | 7 | Relationships | Add memberships, assignments, wage agreements, and search/filter/pagination. | Related entity APIs and paginated lists | Done — 25 November 2026 |
 | 8 | Frontend auth | Set up React routing/layout and connect signup/login forms. | Signup and login usable from browser | Done — 26 November 2026 |
-| 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | In progress |
-| 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | In progress |
-| 11 | Heavy feature backend | Implement acknowledgement, disputes, responses, correction proposals, and immutable audit records. | Heavy feature backend verified | Not started |
-| 12 | Heavy feature UI | Connect worker dispute and contractor response screens; worker confirms resolution. | Complete end-to-end dispute demonstration | Not started |
-| 13 | Testing | Test main flows and bad input; cover wage maths, access isolation, duplicate attendance, reversals, and disputes. | At least five passing API tests and resolved main-flow bugs | In progress |
-| 14 | Deployment | Deploy frontend, backend, and PostgreSQL on free hosting; configure secrets through environment. | Public URL verified for another user | In progress — workspace confirmation blocked |
-| 15 | Ship | Write README run steps and learning section, add screenshots, record two-minute demo, and prepare launch post. | README, screenshots, real demo video, and published LinkedIn link | In progress — partial-build materials verified |
+| 9 | Lists and details | Connect worksite, worker, and record list/detail pages to live APIs. | Live data with loading, empty, and error states | Done — 29 November 2026 |
+| 10 | Management flows | Build create/edit/delete flows, attendance, advances, and payments; use reversals for posted ledger corrections. | CRUD usable from UI; progress post | Software verified 29 November 2026 — milestone post pending |
+| 11 | Heavy feature backend | Implement acknowledgement, disputes, responses, correction proposals, and immutable audit records. | Heavy feature backend verified | Done — 29 November 2026 |
+| 12 | Heavy feature UI | Connect worker dispute and contractor response screens; worker confirms resolution. | Complete end-to-end dispute demonstration | Done — 29 November 2026 |
+| 13 | Testing | Test main flows and bad input; cover wage maths, access isolation, duplicate attendance, reversals, and disputes. | At least five passing API tests and resolved main-flow bugs | Done — 29 November 2026 |
+| 14 | Deployment | Deploy frontend, backend, and PostgreSQL on free hosting; configure secrets through environment. | Public URL verified for another user | Done — 29 November 2026 |
+| 15 | Ship | Write README run steps and learning section, add screenshots, record two-minute demo, and prepare launch post. | README, screenshots, real demo video, and published LinkedIn link | Software and demo verified 29 November 2026 — launch post pending |
 
 ## Progress and evidence
 
@@ -125,3 +125,15 @@ Browser testing exposed the signup role selector's missing exact accessible name
 README now includes precise setup commands, features/limitations, actual screenshots, stack, checks and learning notes. DEMO_SCRIPT.md explains the recording scope. REMAINING_WORK.md lists unfinished requirements and the implementation order. An additional 26 November LinkedIn progress draft is prepared; nothing was published today.
 
 The recording demonstrates the implemented authentication/worksite subset, not complete attendance/payment/dispute flows. Milestone 15 remains in progress. Milestones 4 and 9–15 still have gaps. The all-Track-A completion target is not met as of this run. Public deployment remains blocked by the unconfirmed Render workspace. No paid services were provisioned, completion dates were not fabricated, and Track B remains separate. See [26 November evidence](VERIFICATION_2026-11-26.md).
+
+
+## 29 November 2026 — verified software release
+
+The live contractor and worker UI now supports invitations, assignments, agreed wage rates, attendance, ledger postings, review, receipt confirmation, dispute resolution, and monthly CSV. The project retained every Track A milestone and its original planned dates. The software and hosting were verified on 29 November 2026. This does not backdate the missed 26 November target.
+
+- Milestone 4 passed all seven assertions in a real Postman collection run through Newman. The collection is in `postman/signup.postman_collection.json`.
+- Milestones 9–13 have persisted browser and database evidence. The open attendance dispute keeps the sample closing balance at ₹500. After the worker accepts a half-day correction, the ledger and CSV both show ₹200. Publication evidence for milestone 10 is still open.
+- Milestone 14 has a public HTTPS URL, PostgreSQL-connected health, and verification from fresh browser sessions. [Live workspace](https://worker-wage-tracker-wg8y.onrender.com/#live)
+- Milestone 15 has updated run instructions, screenshots, and a two-minute recording of the real workflow. The launch draft is ready and remains unpublished. [Saved evidence](https://github.com/adityakudi/worker-wage-tracker/commit/935ff6abf3a77899a5744cfc897ebb69a67dfce5)
+
+The full challenge completion date remains open while required LinkedIn publication evidence is missing. No real participant pilot or DSA participation has been verified here. Track B remains separate. [Release verification](VERIFICATION_2026-11-29.md)

@@ -2,27 +2,26 @@
 
 A fresh React/FastAPI/PostgreSQL project for shared work and wage records between daily-wage workers and small contractors.
 
-**Status — 26 November 2026: partial build, not launched.** Authentication and worksite management work in the live UI. Accepted invitations, assignments and immutable wage agreements work through the API. Persistent attendance, payments, reversals, disputes and relationship-management UI remain unfinished. Public deployment is blocked on Render workspace confirmation. The original Track A completion target has not been met.
+**Software release — 29 November 2026.** The live app covers signup, worksite management, worker invitations, agreed wage rates, attendance, advances and payments, corrections, disputes and monthly statements. The public demo runs on free Render hosting. The challenge publication and participant feedback remain separate open items.
+
+[Open the live workspace](https://worker-wage-tracker-wg8y.onrender.com/#live) · [Two-minute walkthrough](docs/release-evidence/2026-11-29/Worker_Wage_Tracker.mp4) · [Verification](docs/VERIFICATION_2026-11-29.md)
 
 ## Problem and users
 
-The problem hypothesis is that scattered paper records and messages make it difficult to reconcile work, rates and money owed. Contractors manage their own worksites and invite workers; workers review only their own records. Demand still needs validation with one contractor and two or three consenting workers. No interviews or pilot outcomes are claimed.
+Contractors and workers need a shared way to reconcile attendance, wage rates and money owed. Contractors manage their own worksites, invite workers and post records. Workers receive invitations, approve wage rates, and can review or dispute their own entries.
 
-## Features and implementation boundaries
+## What you can do
 
-| Feature | Current implementation |
+| Area | Available |
 |---|---|
-| Signup/login | Argon2 hashes, JWT expiry/issuer/audience, role checks, in-memory frontend token |
-| Worksites | Live UI and authenticated CRUD/search/pagination API with contractor ownership |
-| Worker invitations | Participant-only API and worker-only acceptance |
-| Assignments | API requires accepted membership and an owned active worksite |
-| Wage agreements | API uses positive integer paise, ordered effective dates and immutable worker acknowledgement |
-| Money arithmetic | Tested integer-paise helpers, half-day rounding and statement cutoffs; no persisted financial flow |
-| Attendance/payments/reversals | Planned; showcase uses labelled sample data |
-| Disputes/audit and monthly CSV | Planned; sample CSV is not a real worker statement |
-| English/Hindi interface | Planned; current interface is English |
+| Accounts | Worker or contractor signup, Argon2 password hashes, JWT login and role-protected access |
+| Worksites and workers | Worksite create, edit, search, archive and eligible deletion. Worker invitations, assignments and agreed wage rates |
+| Attendance and pay | Full day, half day and absence. Effective wage snapshots, advance and payment records, adjustments and one-time reversals |
+| Review and disputes | Separate review and receipt confirmation, worker disputes, contractor responses, worker decisions and audit history |
+| Records and statements | Participant-only ledgers, date and text filters, pagination, balance totals and monthly CSV |
+| Workspace language | English and Hindi interface labels |
 
-The [canonical feature specification](FEATURES.md) retains the full ten-feature MVP and acceptance rules. [Remaining work](docs/REMAINING_WORK.md) gives the implementation order.
+The [feature specification](FEATURES.md) describes the acceptance rules. All amounts are bookkeeping records. The application does not move money.
 
 ## Stack
 
@@ -49,9 +48,9 @@ npm ci --prefix frontend
 npm run dev --prefix frontend
 ```
 
-Open the Vite URL printed in the terminal. Choose **Open workspace** for real signup/login/worksite forms, or **Explore the demo** for the separate sample-data design preview. Passwords require 10–128 characters. Create a contractor account to manage worksites; the worker UI currently displays an honest placeholder.
+Open the Vite URL printed in the terminal. Choose **Open workspace** and create a contractor account and a worker account to try both roles. Each password needs 10–128 characters. Copy the worker ID from their account. The contractor uses it to invite the worker, and the worker accepts the invitation before the contractor assigns work. The worker acknowledges the proposed rate before attendance can be posted. **Explore the demo** opens a separate sample workspace.
 
-Vite proxies API calls to port 8000. Check `http://127.0.0.1:8000/health` for `status: ok` and `database: connected`. Interactive API documentation is at `/docs`. See [assignment/rate routes](docs/ASSIGNMENTS_API.md).
+Vite proxies API calls to port 8000. Check `http://127.0.0.1:8000/health` for `status: ok` and `database: connected`. Interactive API documentation is at `/docs`. See the [assignment and wage rate API](docs/ASSIGNMENTS_API.md) and [ledger and dispute API](docs/LEDGER_API.md).
 
 For a combined local build:
 
@@ -73,34 +72,26 @@ npm run build --prefix frontend
 
 Set `TEST_DATABASE_URL` to a disposable PostgreSQL database for the real integration suite. It creates/removes an isolated schema and requires schema-creation rights. Without it, database tests are explicitly skipped. Never use production data for tests.
 
-The [26 November verification](docs/VERIFICATION_2026-11-26.md) records **45 passing tests with no skips**, including nineteen PostgreSQL checks, plus production-image boot, HTTP smoke and restart verification. The [browser capture workflow](.github/workflows/capture-demo.yml) also passed real signup/login, persisted worksite CRUD and worker signup, with no browser page errors. It produced six screenshots and a verified 120-second partial-build recording.
+The [release verification](docs/VERIFICATION_2026-11-29.md) records **50 automated tests** with no skips, seven successful signup assertions from the [Postman collection](docs/postman/signup.postman_collection.json), browser checks for both roles and public deployment smoke checks.
 
-Read-only deployment checks use `python scripts/smoke_deployment.py --url https://ACTUAL-HOST`. The optional `--exercise-api` mode creates synthetic fixtures and is strictly for disposable test databases. Full financial-flow testing remains open.
+## Screenshots and walkthrough
 
-## Screenshots, recording and deployment
+![Contractor wage ledger with attendance and advance records](docs/release-evidence/2026-11-29/04-wage-ledger.png)
 
-The [four wireframes](docs/WIREFRAMES.md) are planned designs, not implementation screenshots. The [showcase](docs/SHOWCASE.md) and its earlier one-minute video are sample-data design demonstrations. The [two-minute recording script](docs/DEMO_SCRIPT.md) covers only the implemented live authentication/worksite subset and clearly states missing features.
+![Worker view of an open attendance dispute](docs/release-evidence/2026-11-29/05-worker-dispute.png)
 
-[Watch/download the two-minute progress recording](docs/demo/Worker_Wage_Progress_2026-11-26.mp4). It is silent, captioned, and uses synthetic accounts against the real container/database. [Capture metadata](docs/demo/capture.json) records the source commit. These are actual browser screenshots, not wireframes:
+[All screenshots](docs/release-evidence/2026-11-29) · [Two-minute MP4](docs/release-evidence/2026-11-29/Worker_Wage_Tracker.mp4) · [Free hosting and expiry](docs/DEPLOYMENT.md)
 
-![Live sign-in screen](docs/screenshots/02-sign-in.png)
-
-![Created worksite retrieved from the live API](docs/screenshots/04-created-worksite.png)
-
-![Worker account showing financial views are unfinished](docs/screenshots/06-worker-account.png)
-
-All six captures are in [docs/screenshots](docs/screenshots). Captions were overlaid for explanation; application/API responses were not mocked.
-
-No verified public application URL exists. The [free Render Blueprint and blocker](docs/DEPLOYMENT.md) describe deployment preparation, generated secrets and database health checks. No paid hosting has been purchased. Container CI is not proof of public hosting or independent-user access.
+The recording runs through an invitation, an agreed wage rate, attendance posting, a wage dispute and reconciliation after the worker accepts a correction. It uses synthetic data against PostgreSQL.
 
 ## What I built and what I understood
 
-I built a new requirements baseline, schema design and four wireframes; secure accounts; owned worksite APIs and forms; accepted invitations; assignments; and worker-acknowledged wage terms. I learned to enforce ownership in server queries and composite database keys, keep immutable historical terms, and verify packaged startup and migration replay rather than only isolated functions.
+I built the contractor and worker workflows with React, FastAPI and PostgreSQL. I learned why locking the worker-day record prevents duplicate attendance across worksites, and why calculating money in integer paise matters for half days and exports.
 
-The financial design separates review acknowledgement from payment receipt. Rate snapshots and linked reversals must preserve history, but those persistent attendance/ledger workflows are not implemented yet. Arithmetic tests and attractive sample screens cannot establish that the money-recording product works end to end.
+A rate snapshot keeps past attendance stable. Corrections retain the original entry and post a linked reversal. A worker can review a record without confirming that money was received, so each action has its own history.
 
 ## Fifteen-milestone record and launch materials
 
-[BUILD_PLAN.md](docs/BUILD_PLAN.md) preserves all fifteen Track A milestones, planned dates and actual evidence. Commits use real timestamps. Track B remains separate. The [handover](docs/REMAINING_WORK.md) lists the missed requirements and challenge-evidence gaps.
+[BUILD_PLAN.md](docs/BUILD_PLAN.md) preserves all fifteen Track A milestones, planned dates and actual evidence. Commits use real timestamps. Track B remains separate. The [handover](docs/REMAINING_WORK.md) lists the remaining challenge and pilot work.
 
 Unpublished LinkedIn drafts are available for [milestone 5](docs/LINKEDIN_MILESTONE_5_DRAFT.md), [milestone 10](docs/LINKEDIN_MILESTONE_10_DRAFT.md), [milestone 15](docs/LINKEDIN_MILESTONE_15_DRAFT.md), [calendar day 5](docs/LINKEDIN_CALENDAR_DAY_5_DRAFT.md), and [26 November](docs/LINKEDIN_2026-11-26_DRAFT.md). Publication requires explicit instruction. The single [24 November progress post](https://www.linkedin.com/feed/update/urn:li:activity:7530932552811925504/) does not count as separate milestone publications.

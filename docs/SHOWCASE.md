@@ -22,3 +22,7 @@ These are design-preview interactions. They do not establish completion of persi
 ## 26 November update
 
 The API/database and production container now have passing CI checks. Real browser signup/login and worksite CRUD also passed against disposable PostgreSQL. Six real screenshots and a verified two-minute partial-build recording are linked in README.md and VERIFICATION_2026-11-26.md. Public hosting and persistent financial features remain unfinished. The earlier sample-data showcase remains separate.
+
+## 29 November live walkthrough
+
+The separate sample-data showcase is still available without signup. The live workspace now has worker invitations, assignments, effective rates, attendance, payments, disputes and monthly statements. The two-minute product walkthrough uses a real backend and synthetic accounts. [Release walkthrough](release-evidence/2026-11-29)

@@ -43,3 +43,7 @@ Eight more PostgreSQL checks verify accepted-membership and active-site prerequi
 ## Browser acceptance — 26 November 2026
 
 [Capture run 45840570781](https://github.com/adityakudi/worker-wage-tracker/actions/runs/45840570781) passed the 45-test API suite and production-container checks, then real Chromium signup/login, persisted worksite CRUD and worker signup with no page errors. Its verified screenshots and 120-second partial-build recording are committed. The signup role selector now has an explicit accessible name, fixing the issue found by the first browser attempt. See [dated evidence](VERIFICATION_2026-11-26.md). Complete financial/browser acceptance remains open.
+
+## Full wage ledger acceptance — 29 November 2026
+
+The API and PostgreSQL suite now runs 50 tests. Newman runs seven signup and authenticated-identity assertions against the Postman collection. Chromium checks both roles, a pending wage rate, open dispute, accepted half-day correction, monthly CSV and mobile Hindi login. [Release verification](VERIFICATION_2026-11-29.md)

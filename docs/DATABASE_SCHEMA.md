@@ -29,3 +29,7 @@ erDiagram
 All timestamps timestamptz. Work dates use Asia/Kolkata. A unique active attendance constraint on membership/date prevents duplicate work across sites; corrections reverse and supersede original entries. Use composite ownership constraints to prevent assignments crossing contractor boundaries. Effective wage periods must not overlap. Posted records are immutable; restrict deletion of referenced financial records. These constraints must be implemented and tested in migrations before marking setup complete.
 
 Future attendance/ledger constraints in the preceding paragraph are design requirements, not implemented database guarantees. Assignment/wage agreement constraints are described in [ASSIGNMENTS_API.md](ASSIGNMENTS_API.md). Their implicit periods end at the next proposal's effective date; a pending proposal is not an approved rate for posting.
+
+## Ledger migration — 29 November 2026
+
+Migration 005 implements immutable ledger rows for attendance and financial postings. Attendance rows retain assignment, accepted wage agreement, units and applied rate. A separate worker-day slot prevents conflicting current attendance across worksites. A correction releases or replaces the slot while keeping the original posting, reversal and replacement in the ledger. Participant-specific review and receipt events are separate. Append-only ledger events carry the actor, reason and time for dispute responses and resolutions. [Ledger API and integrity rules](LEDGER_API.md)

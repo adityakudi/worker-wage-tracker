@@ -1,7 +1,11 @@
-# Draft — not published
+# Milestone 10 progress draft
 
-Updated 25 November 2026. Milestone 10 remains incomplete; this draft describes only implemented work.
+Prepared on 29 November 2026. Publication status: draft.
 
-Added worksite creation, editing and deletion to the Worker Wage Tracker interface, including loading states and delete confirmation. PostgreSQL-backed API checks now cover ownership, search and pagination. Worker invitations, assignments and rate acknowledgement are implemented through the API. Their UI and persistent attendance/payment records are still pending; the showcase financial screens use sample data.
+I’ve connected the real worksite, attendance, advance and payment forms in Worker Attendance & Wage Tracker. Recording a full day at ₹600 and an advance of ₹100 leaves ₹500 outstanding. The browser checks also verified that correcting the day to a half day adds a reversal and replacement, with the updated ₹200 balance reflected in the monthly CSV.
+
+This milestone taught me to keep attendance rates attached to the original record and prevent duplicate attendance across worksites.
+
+[Project and evidence](https://github.com/adityakudi/worker-wage-tracker)
 
 #ALTABuilder30 @ALTA School of Technology
