@@ -11,3 +11,5 @@
 Browser checks exposed a missing React import in the first workspace rewrite. The corrected commit passed the full flow. Local startup also exposed a virtual-environment interpreter mismatch, fixed by launching Uvicorn through the active Python interpreter.
 
 The application software was verified on 29 November 2026. Challenge posts and real participant validation remain open. The superseded 26 November progress recording is kept as historical evidence.
+
+A same-day independent rerun exercised the exact ₹600 specification example through both browser roles, including distinct wage review and receipt actions. See the [final cross-check](FINAL_CROSS_CHECK.md).
