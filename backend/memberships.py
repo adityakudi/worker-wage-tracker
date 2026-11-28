@@ -22,7 +22,7 @@ def invite(body: Invitation,user=Depends(contractor)):
 @router.get('')
 def listing(limit:int=Query(20,ge=1,le=100),offset:int=Query(0,ge=0),user=Depends(current_user)):
     with connection() as db:
-        rows=db.execute('SELECT * FROM memberships WHERE contractor_id=%s OR worker_id=%s ORDER BY created_at,id LIMIT %s OFFSET %s',(user['id'],user['id'],limit,offset)).fetchall()
+        rows=db.execute('SELECT m.*, w.email AS worker_email, c.email AS contractor_email FROM memberships m JOIN users w ON w.id=m.worker_id JOIN users c ON c.id=m.contractor_id WHERE m.contractor_id=%s OR m.worker_id=%s ORDER BY m.created_at,m.id LIMIT %s OFFSET %s',(user['id'],user['id'],limit,offset)).fetchall()
     return {'items':rows,'limit':limit,'offset':offset}
 
 @router.post('/{membership_id}/accept')

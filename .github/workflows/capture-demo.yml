@@ -1,8 +1,9 @@
 name: Capture verified browser demo
 on:
+  workflow_dispatch:
   push:
     branches: [main]
-    paths: ['scripts/capture_demo.py', '.github/workflows/capture-demo.yml', 'frontend/**']
+    paths: ['scripts/verify_release_browser.py', '.github/workflows/capture-demo.yml']
 permissions:
   contents: write
 jobs:
@@ -74,31 +75,37 @@ jobs:
           exit 1
       - name: Install browser recording dependencies
         run: |
-          python -m pip install playwright
-          python -m playwright install --with-deps chromium
+          python -m pip install playwright==1.65.2
+          python -m playwright install --with-deps chromium --only-shell
           sudo apt-get install -y ffmpeg
-      - name: Verify browser flows and record the partial-build demo
-        run: python scripts/capture_demo.py
+      - name: Run signup checks with the Postman collection
+        run: npm exec --yes --package=newman@6.2.3 -- newman run docs/postman/signup.postman_collection.json --bail
+      - name: Verify both browser roles and record the end-to-end demo
+        run: |
+          capture_dir="docs/release-evidence/$(TZ=Asia/Kolkata date +%F)"
+          echo "CAPTURE_DIR=$capture_dir" >> "$GITHUB_ENV"
+          python scripts/verify_release_browser.py --artifacts "$capture_dir" --record
       - name: Produce a two-minute MP4 and verify duration
         run: |
-          ffmpeg -y -i docs/demo/browser-recording.webm -t 120 -c:v libx264 -preset fast -crf 27 -pix_fmt yuv420p -movflags +faststart docs/demo/Worker_Wage_Progress_2026-11-26.mp4
-          python -c "import subprocess; seconds=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1','docs/demo/Worker_Wage_Progress_2026-11-26.mp4'])); assert 119.9 <= seconds <= 120.1,seconds; print('PASS: verified 120-second MP4')"
-          rm -rf docs/demo/raw docs/demo/browser-recording.webm
+          ffmpeg -loglevel error -y -i "$CAPTURE_DIR/recording.webm" -t 120 -c:v libx264 -preset fast -crf 26 -pix_fmt yuv420p -movflags +faststart "$CAPTURE_DIR/Worker_Wage_Tracker.mp4"
+          python -c "import subprocess; seconds=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1','$CAPTURE_DIR/Worker_Wage_Tracker.mp4'])); assert 119.9 <= seconds <= 120.1,seconds; print('PASS: verified 120-second MP4')"
+          rm -rf "$CAPTURE_DIR/raw" "$CAPTURE_DIR/recording.webm"
       - name: Preserve verified evidence
         uses: actions/upload-artifact@v4
         with:
-          name: verified-browser-demo
-          path: |
-            docs/screenshots/
-            docs/demo/
+          name: verified-worker-wage-demo
+          path: ${{ env.CAPTURE_DIR }}/
           retention-days: 90
-      - name: Commit actual browser captures after passing all checks
+      - name: Commit verified release evidence
+        if: github.event_name == 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/screenshots docs/demo
-          git commit -m "Add verified browser screenshots and two-minute progress recording"
-          git push origin HEAD:main
+          git add "$CAPTURE_DIR"
+          if ! git diff --cached --quiet; then
+            git commit -m "Save verified Track A browser screenshots and two-minute demo"
+            git push origin HEAD:main
+          fi
       - name: Container diagnostics and cleanup
         if: always()
         run: |

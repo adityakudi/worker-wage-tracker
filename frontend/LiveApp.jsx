@@ -1,15 +1,175 @@
-import React,{useState,useEffect} from 'react';
+import {useCallback, useEffect, useReducer, useState} from 'react';
+import {RecordsWorkspace, useAction} from './RecordsWorkspace';
 
+export default function LiveApp() {
+  const [language, setLanguage] = useState('en');
+  const [token, setToken] = useState('');
+  const [user, setUser] = useState(null);
+  const [signup, setSignup] = useState(false);
+  const [tab, setTab] = useState('worksites');
+  const t = (en, hi) => language === 'hi' ? hi : en;
+  const signOut = useCallback(() => {
+    setUser(null);
+    setToken('');
+    setSignup(false);
+    setTab('worksites');
+  }, []);
+  const api = useCallback(async (path, options = {}) => {
+    const base = import.meta.env.VITE_API_BASE_URL || '/api';
+    if (!import.meta.env.VITE_API_BASE_URL && !['localhost', '127.0.0.1'].includes(location.hostname)) {
+      throw Error('The API is unavailable in this preview. Open the hosted application or use the sample workspace.');
+    }
+    const response = await fetch(base + path, {
+      ...options,
+      headers: {'Content-Type': 'application/json',
+        ...(token ? {Authorization: 'Bearer ' + token} : {}), ...options.headers},
+    });
+    if (response.status === 204) return null;
+    const contentType = response.headers.get('content-type') || '';
+    const data = contentType.includes('application/json') ? await response.json() : await response.text();
+    if (!response.ok) {
+      if (response.status === 401 && token) signOut();
+      const validation = Array.isArray(data?.detail) ? data.detail.map(item => item.msg).join(' · ') : '';
+      throw Error(typeof data?.detail === 'string' ? data.detail : validation || 'The server could not complete that request.');
+    }
+    return data;
+  }, [token, signOut]);
+  const auth = useAction();
 
-export default function LiveApp(){
- const[token,setToken]=useState(''),[user,setUser]=useState(null),[signup,setSignup]=useState(false),[error,setError]=useState(''),[busy,setBusy]=useState(false),[items,setItems]=useState([]),[q,setQ]=useState(''),[offset,setOffset]=useState(0),[total,setTotal]=useState(0),[detail,setDetail]=useState(null),[revision,setRevision]=useState(0);
- async function api(path,options={}){const base=import.meta.env.VITE_API_BASE_URL||'';if(!base&&!['localhost','127.0.0.1'].includes(location.hostname))throw Error('The backend is not deployed yet. Return to the project home to explore the sample demo.');const r=await fetch(base+path,{...options,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})}});const data=r.status===204?null:await r.json();if(!r.ok){if(r.status===401&&token){setToken('');setUser(null);}throw Error(typeof data.detail==='string'?data.detail:'Please check your input.');}return data;}
- async function authenticate(e){e.preventDefault();setBusy(true);setError('');const f=new FormData(e.target),body={email:f.get('email'),password:f.get('password')};try{if(signup)await api('/auth/signup',{method:'POST',body:JSON.stringify({...body,role:f.get('role')})});const data=await api('/auth/login',{method:'POST',body:JSON.stringify(body)});setToken(data.access_token);}catch(e){setError(e.message);}finally{setBusy(false);}}
- useEffect(()=>{if(!token)return;let live=true;api('/auth/me').then(u=>{if(live)setUser(u)}).catch(e=>{if(live)setError(e.message)});return()=>{live=false}},[token]);
- useEffect(()=>{if(!user||user.role!=='contractor')return;let live=true;setBusy(true);setError('');api('/worksites?limit=20&offset='+offset+'&q='+encodeURIComponent(q)).then(d=>{if(live){setItems(d.items);setTotal(d.total)}}).catch(e=>{if(live)setError(e.message)}).finally(()=>{if(live)setBusy(false)});return()=>{live=false}},[user,q,offset,revision]);
- async function open(id){setBusy(true);setError('');try{setDetail(await api('/worksites/'+id));}catch(e){setError(e.message)}finally{setBusy(false)}}
- async function saveSite(e){e.preventDefault();const form=e.currentTarget;const f=new FormData(form);setBusy(true);setError('');try{await api(detail?'/worksites/'+detail.id:'/worksites',{method:detail?'PUT':'POST',body:JSON.stringify({name:f.get('name'),location:f.get('location'),active:f.get('active')==='on'})});setDetail(null);form.reset();setRevision(r=>r+1);}catch(e){setError(e.message)}finally{setBusy(false)}}
- async function deleteSite(){if(!detail||!window.confirm('Delete this worksite? This cannot be undone.'))return;setBusy(true);setError('');try{await api('/worksites/'+detail.id,{method:'DELETE'});setDetail(null);setOffset(0);setRevision(r=>r+1);}catch(e){setError(e.message)}finally{setBusy(false)}}
- return <main><header><span>WORKER WAGE TRACKER</span>{user&&<button onClick={()=>{setUser(null);setToken('');setItems([]);setDetail(null);setError('')}}>Sign out</button>}</header><h1>{user?'Your workspace':'Work recorded. Wages clear.'}</h1>{error&&<p role="alert">{error}</p>}{!user?<section><h2>{signup?'Create an account':'Sign in'}</h2><form onSubmit={authenticate}><label>Email<input name="email" type="email" required autoComplete="email"/></label><label>Password<input name="password" type="password" minLength="10" maxLength="128" required autoComplete={signup?'new-password':'current-password'}/></label>{signup&&<label>Role<select name="role" aria-label="Role"><option value="worker">Worker</option><option value="contractor">Contractor</option></select></label>}<button disabled={busy}>{busy?'Please wait…':signup?'Create account and sign in':'Sign in'}</button></form><button onClick={()=>{setSignup(!signup);setError('')}}>{signup?'Already registered? Sign in':'Create an account'}</button></section>:<><p>{user.email} · {user.role}</p>{user.role==='contractor'?<section><h2>Worksites</h2><form key={detail?.id||'new'} onSubmit={saveSite}><h3>{detail?'Edit worksite':'Add worksite'}</h3><label>Name<input name="name" required maxLength="120" defaultValue={detail?.name||''}/></label><label>Location<input name="location" maxLength="300" defaultValue={detail?.location||''}/></label><label><input name="active" type="checkbox" defaultChecked={detail?detail.active:true}/>Active</label><button disabled={busy}>{busy?'Saving…':detail?'Save changes':'Create worksite'}</button>{detail&&<><button type="button" disabled={busy} onClick={()=>setDetail(null)}>Cancel edit</button><button type="button" disabled={busy} onClick={deleteSite}>Delete worksite</button></>}</form><label>Search worksites<input value={q} onChange={e=>{setQ(e.target.value);setOffset(0)}}/></label>{busy?<p role="status">Loading…</p>:items.length?<ul>{items.map(s=><li key={s.id}><button onClick={()=>open(s.id)}>{s.name}</button><span>{s.active?'Active':'Inactive'}</span></li>)}</ul>:<p>No worksites found.</p>}<nav><button disabled={busy||offset===0} onClick={()=>setOffset(offset-20)}>Previous</button><span>{total} results</span><button disabled={busy||offset+20>=total} onClick={()=>setOffset(offset+20)}>Next</button></nav>{detail&&<article><h3>{detail.name}</h3><p>{detail.location||'No location provided'}</p><p>{detail.active?'Active':'Inactive'}</p><button onClick={()=>setDetail(null)}>Close details</button></article>}</section>:<section><h2>Worker account</h2><p>Your attendance and wage views are being built. No financial records are displayed yet.</p></section>}</>}</main>
+  async function authenticate(event) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const credentials = {email: form.get('email'), password: form.get('password')};
+    await auth.run(async () => {
+      if (signup) await api('/auth/signup', {method: 'POST', body: JSON.stringify({...credentials, role: form.get('role')})});
+      const {access_token} = await api('/auth/login', {method: 'POST', body: JSON.stringify(credentials)});
+      const identity = await api('/auth/me', {headers: {Authorization: 'Bearer ' + access_token}});
+      setTab(identity.role === 'worker' ? 'records' : 'worksites');
+      setUser(identity);
+      setToken(access_token);
+    });
+  }
+
+  return <main lang={language} className="live-app">
+    <header className="live-header">
+      <span>WORKER WAGE TRACKER</span>
+      <label>{t('Language', 'भाषा')} <select value={language} onChange={e => setLanguage(e.target.value)}>
+        <option value="en">English</option><option value="hi">हिन्दी</option>
+      </select></label>
+      {user && <button onClick={signOut}>{t('Sign out', 'साइन आउट')}</button>}
+    </header>
+    <h1>{user ? t('Your workspace', 'आपका कार्यक्षेत्र') : t('Work recorded. Wages clear.', 'काम का हिसाब, मज़दूरी साफ़।')}</h1>
+    {!user ? <section className="live-panel">
+      <h2>{signup ? t('Create an account', 'खाता बनाएँ') : t('Sign in', 'साइन इन')}</h2>
+      {auth.error && <p role="alert">{auth.error}</p>}
+      <form onSubmit={authenticate}>
+        <label>{t('Email', 'ईमेल')}<input name="email" type="email" required autoComplete="email"/></label>
+        <label>{t('Password', 'पासवर्ड')}<input name="password" type="password" minLength="10" maxLength="128" required
+          autoComplete={signup ? 'new-password' : 'current-password'}/></label>
+        {signup && <label>{t('Role', 'भूमिका')}<select name="role" aria-label={t('Role', 'भूमिका')}>
+          <option value="worker">{t('Worker', 'कामगार')}</option>
+          <option value="contractor">{t('Contractor', 'ठेकेदार')}</option>
+        </select></label>}
+        <button disabled={auth.busy}>{auth.busy ? t('Please wait…', 'कृपया प्रतीक्षा करें…')
+          : signup ? t('Create account and sign in', 'खाता बनाएँ और साइन इन करें') : t('Sign in', 'साइन इन')}</button>
+      </form>
+      <button disabled={auth.busy} onClick={() => {setSignup(!signup); auth.clear();}}>
+        {signup ? t('Already registered? Sign in', 'पहले से खाता है? साइन इन करें') : t('Create an account', 'खाता बनाएँ')}
+      </button>
+    </section> : <>
+      <div className="live-account">
+        <strong>{user.email}</strong> · {user.role === 'worker' ? t('Worker', 'कामगार') : t('Contractor', 'ठेकेदार')}
+        {user.role === 'worker' && <p>{t('Your worker ID', 'आपकी कामगार आईडी')} <code>{user.id}</code></p>}
+      </div>
+      {user.role === 'contractor' && <nav className="live-tabs" aria-label={t('Workspace sections', 'कार्य क्षेत्र')}>
+        <button aria-pressed={tab === 'worksites'} onClick={() => setTab('worksites')}>{t('Worksites', 'कार्यस्थल')}</button>
+        <button aria-pressed={tab === 'records'} onClick={() => setTab('records')}>{t('Workers & wages', 'कामगार और मज़दूरी')}</button>
+      </nav>}
+      {tab === 'worksites' && user.role === 'contractor'
+        ? <Worksites api={api} t={t}/>
+        : <RecordsWorkspace api={api} user={user} t={t}/>}
+    </>}
+  </main>;
 }
 
+function Worksites({api, t}) {
+  const [page, setPage] = useState(null);
+  const [q, setQuery] = useState('');
+  const [offset, setOffset] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [failure, setFailure] = useState('');
+  const [version, refresh] = useReducer(n => n + 1, 0);
+  const action = useAction();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+    setFailure('');
+    api('/worksites?' + new URLSearchParams({q, limit: '20', offset}), {signal: controller.signal})
+      .then(setPage)
+      .catch(error => {if (!controller.signal.aborted) setFailure(error.message);})
+      .finally(() => {if (!controller.signal.aborted) setLoading(false);});
+    return () => controller.abort();
+  }, [api, q, offset, version]);
+
+  function save(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fields = new FormData(form);
+    action.run(async () => {
+      await api(selected ? '/worksites/' + selected.id : '/worksites', {
+        method: selected ? 'PUT' : 'POST',
+        body: JSON.stringify({name: fields.get('name'), location: fields.get('location'), active: fields.has('active')}),
+      });
+      setSelected(null);
+      form.reset();
+      setOffset(0);
+      refresh();
+    });
+  }
+
+  function remove() {
+    if (!selected || !window.confirm(t('Delete this worksite?', 'यह कार्यस्थल मिटाएँ?'))) return;
+    action.run(async () => {
+      await api('/worksites/' + selected.id, {method: 'DELETE'});
+      setSelected(null);
+      setOffset(0);
+      refresh();
+    });
+  }
+
+  return <section className="live-panel">
+    <h2>{t('Worksites', 'कार्यस्थल')}</h2>
+    {action.error && <p role="alert">{action.error}</p>}
+    <form key={selected?.id || 'new'} onSubmit={save} className="live-form">
+      <h3>{selected ? t('Edit worksite', 'कार्यस्थल संपादित करें') : t('Add worksite', 'कार्यस्थल जोड़ें')}</h3>
+      <label>{t('Name', 'नाम')}<input name="name" required maxLength="120" defaultValue={selected?.name || ''}/></label>
+      <label>{t('Location', 'स्थान')}<input name="location" maxLength="300" defaultValue={selected?.location || ''}/></label>
+      <label><input name="active" type="checkbox" defaultChecked={selected?.active ?? true}/>{t('Active', 'सक्रिय')}</label>
+      <div className="live-actions">
+        <button disabled={action.busy}>{selected ? t('Save changes', 'बदलाव सहेजें') : t('Create worksite', 'कार्यस्थल बनाएँ')}</button>
+        {selected && <>
+          <button type="button" onClick={() => setSelected(null)}>{t('Cancel edit', 'संपादन रद्द करें')}</button>
+          <button type="button" disabled={action.busy} onClick={remove}>{t('Delete worksite', 'कार्यस्थल मिटाएँ')}</button>
+        </>}
+      </div>
+    </form>
+    <label>{t('Search worksites', 'कार्यस्थल खोजें')}<input value={q} onChange={e => {setQuery(e.target.value); setOffset(0);}}/></label>
+    {loading && <p role="status">{t('Loading…', 'लोड हो रहा है…')}</p>}
+    {failure && <p role="alert">{failure}</p>}
+    {!loading && !failure && (page?.items.length ? <ul className="live-list">{page.items.map(site => <li key={site.id}>
+      <button onClick={() => action.run(async () => setSelected(await api('/worksites/' + site.id)))}>{site.name}</button>
+      <span>{site.active ? t('Active', 'सक्रिय') : t('Inactive', 'निष्क्रिय')}</span>
+    </li>)}</ul> : <p>{t('No worksites found.', 'कोई कार्यस्थल नहीं मिला।')}</p>)}
+    <nav className="live-actions">
+      <button disabled={loading || offset === 0} onClick={() => setOffset(offset - 20)}>{t('Previous', 'पिछला')}</button>
+      <span>{page?.total ?? 0} {t('results', 'परिणाम')}</span>
+      <button disabled={loading || offset + 20 >= (page?.total ?? 0)} onClick={() => setOffset(offset + 20)}>{t('Next', 'अगला')}</button>
+    </nav>
+    {selected && <article>
+      <h3>{selected.name}</h3><p>{selected.location || t('No location provided', 'स्थान दर्ज नहीं है')}</p>
+      <button onClick={() => setSelected(null)}>{t('Close details', 'विवरण बंद करें')}</button>
+    </article>}
+  </section>;
+}

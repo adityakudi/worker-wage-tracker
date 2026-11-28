@@ -289,3 +289,143 @@ class PostgreSQLContracts(unittest.TestCase):
             codes = list(pool.map(submit, [60000,65000]))
         self.assertEqual(sorted(codes), [201,409])
         self.assertEqual(self.client.get(route, headers=self.worker_headers).json()['total'], 1)
+
+    def post_attendance(self, assignment, day, units=2, request_id=None, notes=''):
+        return self.client.post('/attendance', headers=self.owner_headers, json={
+            'assignment_id': assignment['id'], 'work_date': day, 'half_day_units': units,
+            'request_id': request_id or str(uuid4()), 'notes': notes,
+        })
+
+    def approve_rate(self, assigned, effective='2026-11-17', rate=60000):
+        agreement = self.proposal(assigned, effective, rate)
+        response = self.client.post('/wage-agreements/'+agreement['id']+'/acknowledge', headers=self.worker_headers)
+        self.assertEqual(response.status_code, 200, response.text)
+        return agreement
+
+    def test_attendance_rejects_pending_and_future_and_preserves_rate(self):
+        assigned = self.assignment()
+        first = self.approve_rate(assigned)
+        original = self.post_attendance(assigned, '2026-11-18', 1)
+        self.assertEqual(original.status_code, 201, original.text)
+        self.assertEqual(original.json()['amount_paise'], '30000')
+        self.assertEqual(original.json()['wage_agreement_id'], first['id'])
+        changed = self.proposal(assigned, '2026-11-19', 75001)
+        self.assertEqual(self.post_attendance(assigned, '2026-11-19').status_code, 409)
+        self.assertEqual(self.post_attendance(assigned, '9999-12-31').status_code, 422)
+        self.assertEqual(self.client.post('/wage-agreements/'+changed['id']+'/acknowledge', headers=self.worker_headers).status_code, 200)
+        later = self.post_attendance(assigned, '2026-11-19', 1)
+        self.assertEqual(later.json()['amount_paise'], '37501')
+        original_detail = self.client.get('/ledger/'+original.json()['id'], headers=self.worker_headers)
+        self.assertEqual(original_detail.json()['daily_rate_paise'], '60000')
+
+    def test_single_attendance_across_worksites_in_parallel(self):
+        assigned = self.assignment()
+        second_site = self.site('South worksite')
+        second = self.client.post('/assignments', headers=self.owner_headers, json={
+            'membership_id': assigned['membership_id'], 'worksite_id': second_site['id'], 'start_date':'2026-11-17',
+        }).json()
+        self.approve_rate(assigned)
+        self.approve_rate(second)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            results = list(pool.map(lambda item: self.post_attendance(item, '2026-11-20'), [assigned,second]))
+        self.assertEqual(sorted(result.status_code for result in results), [201,409])
+        self.assertEqual(sum(result.status_code == 201 for result in results), 1)
+
+    def test_attendance_advance_payment_and_export_reconcile(self):
+        import csv
+        from io import StringIO
+        assigned = self.assignment()
+        self.approve_rate(assigned)
+        for day, units in [('17',2),('18',2),('19',2),('20',1)]:
+            response = self.post_attendance(assigned, '2026-11-'+day, units)
+            self.assertEqual(response.status_code, 201, response.text)
+        path = '/memberships/'+assigned['membership_id']
+        self.assertEqual(self.client.post(path+'/ledger', headers=self.owner_headers, json={
+            'kind':'adjustment','effective_date':'2026-10-31','amount_paise':2000,
+            'notes':'Opening adjustment','request_id':str(uuid4()),
+        }).status_code,201)
+        for kind, amount in [('advance',50000),('payment',100000)]:
+            note = '=hello' if kind == 'advance' else 'Payment'
+            response = self.client.post(path+'/ledger', headers=self.owner_headers, json={
+                'kind':kind,'effective_date':'2026-11-20','amount_paise':amount,'request_id':str(uuid4()),'notes':note,
+            })
+            self.assertEqual(response.status_code,201,response.text)
+        # The INR 600 example increases by the INR 20 opening adjustment.
+        filters = '?start=2026-11-01&end=2026-11-30&limit=2'
+        data = self.client.get(path+'/ledger'+filters, headers=self.worker_headers).json()
+        self.assertEqual(data['total'],6)
+        self.assertEqual(len(data['items']),2)
+        self.assertEqual(data['totals'], {
+            'opening_paise':'2000','earnings_paise':'210000','advances_paise':'50000',
+            'payments_paise':'100000','adjustments_paise':'0','closing_paise':'62000',
+        })
+        exported = self.client.get(path+'/statement.csv?month=2026-11', headers=self.worker_headers)
+        self.assertEqual(exported.status_code,200,exported.text)
+        rows = list(csv.reader(StringIO(exported.text)))
+        self.assertEqual(dict(zip(rows[0],rows[1])),data['totals'])
+        self.assertIn("'=hello", [record[3] for record in rows[4:]])
+        for outsider in [self.stranger_headers,self.other_headers]:
+            self.assertEqual(self.client.get(path+'/ledger'+filters, headers=outsider).status_code,404)
+            self.assertEqual(self.client.get(path+'/statement.csv?month=2026-11', headers=outsider).status_code,404)
+            self.assertEqual(self.client.get('/ledger/'+data['items'][0]['id'],headers=outsider).status_code,404)
+        self.assertEqual(self.client.post(path+'/ledger', headers=self.worker_headers, json={
+            'kind':'payment','effective_date':'2026-11-20','amount_paise':1000,'request_id':str(uuid4()),
+        }).status_code,403)
+
+    def test_payment_retry_review_and_reversal(self):
+        assigned = self.assignment()
+        path = '/memberships/'+assigned['membership_id']+'/ledger'
+        fields = {'kind':'payment','effective_date':'2026-11-20','amount_paise':5001,'request_id':str(uuid4())}
+        first = self.client.post(path,headers=self.owner_headers,json=fields)
+        self.assertEqual(first.status_code,201,first.text)
+        replay = self.client.post(path,headers=self.owner_headers,json=fields)
+        self.assertEqual(replay.json()['id'],first.json()['id'])
+        conflicting = self.client.post(path,headers=self.owner_headers,json={**fields,'amount_paise':5002})
+        self.assertEqual(conflicting.status_code,409)
+        entry = '/ledger/'+first.json()['id']
+        self.assertEqual(self.client.post(entry+'/reviews/acknowledged',headers=self.worker_headers).status_code,201)
+        self.assertFalse(self.client.get(entry,headers=self.worker_headers).json()['receipt_confirmed'])
+        self.assertEqual(self.client.post(entry+'/reviews/receipt_confirmed',headers=self.worker_headers).status_code,201)
+        results = []
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            results = list(pool.map(lambda _: self.client.post(entry+'/reverse',headers=self.owner_headers,
+                json={'reason':'Duplicate disbursement'}), range(2)))
+        self.assertEqual(sorted(result.status_code for result in results),[200,409])
+        self.assertEqual(self.client.get(entry,headers=self.worker_headers).json()['amount_paise'],'-5001')
+        result = self.client.get(path+'?start=2026-11-01&end=2026-11-30',headers=self.worker_headers).json()
+        self.assertEqual(result['total'],2)
+        self.assertEqual(result['totals']['closing_paise'],'0')
+
+    def test_dispute_rejection_and_atomic_acceptance_keep_history(self):
+        assigned = self.assignment()
+        self.approve_rate(assigned)
+        original = self.post_attendance(assigned,'2026-11-20').json()
+        entry = '/ledger/'+original['id']
+        path = '/memberships/'+assigned['membership_id']+'/ledger?start=2026-11-01&end=2026-11-30'
+        self.assertEqual(self.client.post(entry+'/dispute',headers=self.stranger_headers,json={'reason':'Half day'}).status_code,404)
+        self.assertEqual(self.client.post(entry+'/dispute',headers=self.worker_headers,json={'reason':'Half day'}).status_code,201)
+        self.assertEqual(self.client.get(path,headers=self.worker_headers).json()['totals']['closing_paise'],'60000')
+        self.assertEqual(self.client.post(entry+'/reverse',headers=self.owner_headers,json={'reason':'Too early'}).status_code,409)
+        self.assertEqual(self.client.post(entry+'/dispute/respond',headers=self.owner_headers,json={'reason':'Initial reply'}).status_code,200)
+        self.assertEqual(self.client.post(entry+'/dispute/decide',headers=self.worker_headers,json={'accept':False}).status_code,200)
+        self.assertEqual(self.client.post(entry+'/dispute/respond',headers=self.owner_headers,
+            json={'reason':'Incorrect day units','correct':True,'replace_units':1}).status_code,200)
+        accepted = self.client.post(entry+'/dispute/decide',headers=self.worker_headers,json={'accept':True})
+        self.assertEqual(accepted.status_code,200,accepted.text)
+        self.assertEqual(self.client.post(entry+'/dispute/decide',headers=self.worker_headers,json={'accept':True}).status_code,409)
+        output = self.client.get(path,headers=self.owner_headers).json()
+        self.assertEqual(output['total'],3)
+        self.assertEqual(output['totals']['closing_paise'],'30000')
+        self.assertEqual(self.post_attendance(assigned,'2026-11-20').status_code,409)
+        original_again = self.client.get(entry,headers=self.worker_headers).json()
+        self.assertEqual(original_again['amount_paise'],'60000')
+        self.assertEqual(original_again['dispute_status'],'resolved')
+        self.assertTrue(original_again['reversed'])
+        self.assertEqual([event['kind'] for event in original_again['history']],
+            ['posted','disputed','responded','response_rejected','correction_proposed','reversed','resolved'])
+        with self.assertRaises(psycopg.errors.CheckViolation):
+            with psycopg.connect(self.url) as db:
+                db.execute('UPDATE ledger_entries SET amount_paise=0 WHERE id=%s',(original['id'],))
+        with self.assertRaises(psycopg.errors.CheckViolation):
+            with psycopg.connect(self.url) as db:
+                db.execute('DELETE FROM ledger_events WHERE entry_id=%s',(original['id'],))

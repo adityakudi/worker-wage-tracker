@@ -1,5 +1,6 @@
 """Container entry point: validate configuration, migrate, then start the server."""
 import os
+import sys
 from pathlib import Path
 
 from backend.migrate import migrate
@@ -21,7 +22,8 @@ def main():
         raise SystemExit('Build frontend/dist before starting the combined service.')
     applied = migrate(url)
     print('Migrations:', ', '.join(applied) or 'already up to date', flush=True)
-    os.execvp('uvicorn', ['uvicorn', 'backend.main:app', '--host', '0.0.0.0', '--port', str(port)])
+    os.execv(sys.executable, [sys.executable, '-m', 'uvicorn', 'backend.main:app',
+                              '--host', '0.0.0.0', '--port', str(port)])
 
 
 if __name__ == '__main__':

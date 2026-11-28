@@ -106,7 +106,7 @@ def wages(assignment_id: UUID, limit: int = Query(20, ge=1, le=100), offset: int
     with connection() as db:
         visible_assignment(db, assignment_id, user)
         total = db.execute('SELECT count(*) AS total FROM wage_agreements WHERE assignment_id=%s', (assignment_id,)).fetchone()['total']
-        items = db.execute('SELECT * FROM wage_agreements WHERE assignment_id=%s ORDER BY effective_from,id LIMIT %s OFFSET %s',
+        items = db.execute('SELECT *, daily_rate_paise::text AS daily_rate_paise_text FROM wage_agreements WHERE assignment_id=%s ORDER BY effective_from,id LIMIT %s OFFSET %s',
                            (assignment_id, limit, offset)).fetchall()
     return {'items': items, 'total': total, 'limit': limit, 'offset': offset}
 

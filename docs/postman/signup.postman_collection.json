@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "Worker Wage Tracker signup acceptance",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Run with a fresh disposable database; creates a synthetic worker account."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Reject short password",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/auth/signup",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"{{email}}\", \"password\": \"short\", \"role\": \"worker\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('email', 'postman-' + pm.variables.replaceIn('{{$guid}}') + '@example.com');",
+              "pm.collectionVariables.set('password', 'synthetic-postman-test-' + pm.variables.replaceIn('{{$guid}}'));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Reject short password returns 422\", () => pm.response.to.have.status(422));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Signup worker",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/auth/signup",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"{{email}}\", \"password\": \"{{password}}\", \"role\": \"worker\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Signup worker returns 201\", () => pm.response.to.have.status(201));",
+              "pm.test('Identity returned without password or hash', () => {",
+              "  const data = pm.response.json();",
+              "  pm.expect(data).to.have.all.keys('id', 'email', 'role');",
+              "  pm.expect(data.role).to.equal('worker');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject duplicate signup",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/auth/signup",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"{{email}}\", \"password\": \"{{password}}\", \"role\": \"worker\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Reject duplicate signup returns 409\", () => pm.response.to.have.status(409));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login with new account",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/auth/login",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"{{email}}\", \"password\": \"{{password}}\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Login with new account returns 200\", () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set('token', pm.response.json().access_token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Verify authenticated identity",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/auth/me",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Verify authenticated identity returns 200\", () => pm.response.to.have.status(200));",
+              "pm.test('Authenticated email matches signup', () => pm.expect(pm.response.json().email).to.equal(pm.collectionVariables.get('email')));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

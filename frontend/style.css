@@ -4,3 +4,36 @@
 
 /* Keep task text readable while metadata stays quiet. */
 td{font-size:14px}.person{font-size:14px}.person small{font-size:12px}.record-button{font-size:13px}.panel-title p,.demo-banner{font-size:13px}.stat>p{font-size:12px}
+
+/* Live records use the same palette as the sample workspace. */
+.live-shell > .live-app { max-width: 1120px; margin: auto; padding: 32px 20px 64px; }
+.live-header, .live-actions, .live-tabs, .live-filters {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 12px 0;
+}
+.live-header > span { margin-right: auto; font-weight: 700; letter-spacing: .08em; }
+.live-app h1 { margin: 22px 0; }
+.live-app .live-panel { margin: 16px 0; max-width: none; overflow: hidden; }
+.live-account { overflow-wrap: anywhere; }
+.live-account p, .live-history p { margin: 8px 0; }
+.live-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  align-items: end; gap: 10px 16px; margin: 12px 0 22px; }
+.live-form h3, .live-form > [role=alert], .live-form > [role=status] { grid-column: 1 / -1; }
+.live-form label, .live-filters label { min-width: 0; margin: 0; }
+.live-app input, .live-app select, .live-app textarea { color-scheme: dark; max-width: 100%; }
+.live-app textarea { display: block; width: 100%; background: #141b16; color: inherit;
+  border: 1px solid #68766d; border-radius: 6px; padding: 8px; resize: vertical; }
+.live-app button[aria-pressed=true] { outline: 2px solid #fff5d9; outline-offset: 2px; }
+.live-list { list-style: none; padding: 0; }
+.live-list li { display: flex; align-items: center; flex-wrap: wrap; padding: 10px 0; gap: 10px;
+  border-bottom: 1px solid #3a453d; overflow-wrap: anywhere; }
+.live-list li button { width: auto; }
+.live-status { color: #f1cb82; }
+.live-totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.live-totals div { border: 1px solid #3a453d; border-radius: 6px; padding: 10px; overflow-wrap: anywhere; }
+.live-totals dd { margin: 4px 0 0; color: #f1cb82; font-size: 1.12rem; font-weight: 700; }
+.live-history { padding-left: 24px; overflow-wrap: anywhere; }
+.live-history li { margin-bottom: 12px; }
+@media (max-width: 480px) {
+  .live-shell > .live-app { padding-inline: 12px; }
+  .live-list li { align-items: flex-start; flex-direction: column; }
+}
