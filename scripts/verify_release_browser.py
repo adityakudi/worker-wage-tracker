@@ -101,6 +101,20 @@ def run(origin, artifacts=None, recording=False):
         worker_id = page.locator('.live-account code').inner_text()
         button('Sign out').click()
         sign_up(owner_email, 'contractor')
+        field('Name').fill('Unassigned test site')
+        button('Create worksite').click()
+        expect(button('Unassigned test site')).to_be_visible()
+        field('Search worksites').fill('Unassigned')
+        button('Unassigned test site').click()
+        expect(page.get_by_role('heading', name='Edit worksite')).to_be_visible()
+        field('Name').fill('Unassigned edited site')
+        button('Save changes').click()
+        expect(button('Unassigned edited site')).to_be_visible()
+        button('Unassigned edited site').click()
+        page.once('dialog', lambda dialog: dialog.accept())
+        button('Delete worksite').click()
+        expect(page.get_by_text('No worksites found.', exact=True)).to_be_visible()
+        field('Search worksites').fill('')
         field('Name').fill('Jaipur test site')
         field('Location').fill('Synthetic demo data')
         button('Create worksite').click()
@@ -128,7 +142,7 @@ def run(origin, artifacts=None, recording=False):
         button('Open worker record').click()
         assignment()
         button('Acknowledge rate').click()
-        expect(page.get_by_text('Agreed', exact=False).filter(has_not_text='Assignments')).to_be_visible()
+        expect(page.locator('.live-list li').filter(has_text='₹600.00').get_by_text('Agreed', exact=False)).to_be_visible()
         chapter(51, 'Worker agrees to the rate', 'The wage terms are saved with the worker’s acknowledgement.', '03-agreed-rate.png')
         switch(owner_email)
         owner_records()
@@ -195,7 +209,7 @@ def run(origin, artifacts=None, recording=False):
         (artifacts / 'capture.json').write_text(json.dumps({
             'capture_date_ist': today, 'source_commit': source,
             'fixture': 'Synthetic worker and contractor in a disposable database',
-            'checks': ['signup and login', 'worksite', 'invitation and assignment', 'acknowledged rate',
+            'checks': ['signup and login', 'worksite create, search, detail, edit and delete', 'invitation and assignment', 'acknowledged rate',
                        'attendance and advance', 'worker dispute and corrected ledger', 'monthly CSV',
                        'protected API', 'mobile Hindi login'],
         }, indent=2) + '\n')
